@@ -1,0 +1,9 @@
+---
+
+users:
+  -
+    name: juri
+    key:  https://github.com/hudolejev.keys
+  -
+    name: roman
+    key: https://github.com/romankuchin.keys
