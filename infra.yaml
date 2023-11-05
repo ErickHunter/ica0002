@@ -7,4 +7,5 @@
   - name: Nginx
     hosts: web_servers
     roles:
+      - agama
       - nginx
