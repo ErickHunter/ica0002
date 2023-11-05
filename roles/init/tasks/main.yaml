@@ -3,15 +3,19 @@
 #- name: Ansible ping module
 #  ansible.builtin.ping:
 
+- name: Update APT cache
+  ansible.builtin.apt:
+    cache_valid_time: 86400
+
 - name: Create user(s)
   user:
     name: "{{ item.name }}"
   loop: "{{ users }}"
 
-- name: Set authorized keys
-  ansible.posix.authorized_key:
-    user: "{{ item.name }}"
-    state: present
-    key: "{{ item.key }}"
-    validate_certs: False
-  loop: "{{ users }}"
+#- name: Set authorized keys
+#  ansible.posix.authorized_key:
+#    user: "{{ item.name }}"
+#    state: present
+#    key: "{{ item.key }}"
+#    validate_certs: False
+#  loop: "{{ users }}"
