@@ -1,5 +1,5 @@
 ---
-- name: Add user 'agama'
+- name: Add user "agama"
   user:
     name: agama
     system: yes
