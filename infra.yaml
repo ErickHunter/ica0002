@@ -4,6 +4,11 @@
     roles:
       - init
 
+  - name: Database Server
+    hosts: db_servers
+    roles:
+      - mysql
+
   - name: Nginx
     hosts: web_servers
     roles:

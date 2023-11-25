@@ -1,0 +1,38 @@
+---
+- name: Install "mysql-server"
+  apt:
+    name: mysql-server
+    state: latest
+    update_cache: no
+
+- name: Copy file "override.cnf" to remote host "/etc/mysql/mysql.conf.d/override.cnf"
+  copy:
+    src: override.cnf
+    dest: /etc/mysql/mysql.conf.d/override.cnf
+  notify: Restart mysql
+
+
+- name: Set "mysql" state "started" and enabled "yes"
+  service:
+    name: mysql
+    state: started
+    enabled: yes  
+
+- name: Install "python3-pymysql" a mysql depencancy
+  apt:
+    name: python3-pymysql
+    state: latest
+    update_cache: no
+
+- name: MySQL database
+  community.mysql.mysql_db:
+    name: "{{ mysql_database }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: MySQL user
+  community.mysql.mysql_user:
+    name: "{{ mysql_user }}"
+    password: "{{ mysql_password }}"
+    host: "%"
+    priv: "{{ mysql_database }}.*:ALL"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
