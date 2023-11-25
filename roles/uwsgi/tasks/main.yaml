@@ -8,9 +8,12 @@
 
 
 - name: Copy over uwsgi config file
-  copy:
-    src: agama.ini
+  template:
+    src: agama.ini.j2
     dest: /etc/uwsgi/apps-enabled/agama.ini
+    owner: agama
+    mode: 0600
+  no_log: true
   notify: Restart uwsgi
 
 - name: Set uwsgi state "started" and enabled "yes"
