@@ -5,3 +5,19 @@
     name: nginx
     state: latest
     update_cache: yes
+
+
+
+- name: Copy file "defult" to remote host "nginx/sites-enabled"
+  copy:
+    src: default
+    dest: /etc/nginx/sites-enabled/default
+  notify: Restart nginx
+
+
+- name: Set nginx state "started" and enabled "yes"
+  service:
+    name: nginx
+    state: started
+    enabled: yes  
+  
