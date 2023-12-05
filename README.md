@@ -79,3 +79,9 @@ Wait until virtual machine reboots, connect via SSH and verify that the uWSGI se
     service uwsgi status
 
 **Note: from now on, verify every managed service this way at least once!**
+
+
+
+
+if you ever get the error ModuleNotFoundError: No module named 'MySQLdb' check lab 4 readme and search the error.
+then 
