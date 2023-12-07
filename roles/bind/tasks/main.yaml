@@ -1,0 +1,24 @@
+---
+- name: Install "bind9"
+  apt:
+    name: bind9
+    state: latest
+    update_cache: no
+
+- name: Set "bind9" state "started" and enabled "yes"
+  service:
+    name: bind9
+    state: started
+    enabled: yes 
+
+- name: Template "named.conf.options.j2" file "named.conf.options.j2" to remote host "/etc/bind/named.conf.options"
+  template:
+    src: named.conf.options.j2
+    dest: /etc/bind/named.conf.options
+    #owner: OPTIONAL_UESR
+    #mode: OPTIONAL
+  #no_log: no #ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  notify: Restart bind9
+
+- debug:
+    msg: "{% for vm in groups['all'] %} nameserver {{ hostvars[vm]['ansible_default_ipv4']['address'] }}{% endfor %}"

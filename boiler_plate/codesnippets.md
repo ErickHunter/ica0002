@@ -14,6 +14,15 @@
     dest: TO/HERE
   notify: Restart SERVICE
 
+- name: Template "WHAT" file "FROM" to remote host "TO"
+  template:
+    src: FROM
+    dest: TO/HERE
+    owner: OPTIONAL_UESR
+    mode: OPTIONAL
+  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  notify: HANDLER
+
 #make sure service is started and enabled
 - name: Set "SERVICE" state "started" and enabled "yes"
   service:

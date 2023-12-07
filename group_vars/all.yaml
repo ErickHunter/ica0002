@@ -1,4 +1,6 @@
-mysql_host: 192.168.42.175
+#Make sure after every server reset to update IPs and stuff. 
+#So far this should be the local IP of the machine running the DB. 
+mysql_host: 192.168.43.132
 mysql_database: agama
 mysql_user: agama
 mysql_password: !vault |
@@ -8,3 +10,15 @@ mysql_password: !vault |
           37356438376465346534666239386232396136613166356338623335333531636239393162636231
           3835313934323866350a366362623335636364396538636665346465373861316564653561653130
           3766
+
+my_domain: lizard.elh #root domain // strtup_name
+master_zone: lizard.elh #master zone = db.pho file
+
+dns_forwarders:
+  - 8.8.8.8
+  - 8.8.4.4
+
+acl_allowed_networks:
+  - 192.168.42.0/23;
+  - 127.0.0.0/8;
+

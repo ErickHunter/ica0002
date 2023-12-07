@@ -1,0 +1,29 @@
+options {
+    directory "/var/cache/bind";
+
+    recursion yes;
+    allow-recursion { localhost; };
+
+    allow-query {
+        localhost;
+        local_network;
+    };
+
+    forwarders {
+        {% for network in dns_forwarders %}
+        {{ network }};
+        {% endfor %}
+    };
+
+    dnssec-enable no;
+    dnssec-validation no;
+
+    auth-nxdomain no; # conform to RFC1035
+    listen-on-v6 { any; };
+};
+
+acl local_network {
+    {% for network in acl_allowed_networks %}
+    {{ network }};
+    {% endfor %}
+};
