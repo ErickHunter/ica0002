@@ -1,6 +1,8 @@
 #Make sure after every server reset to update IPs and stuff. 
 #So far this should be the local IP of the machine running the DB. 
-mysql_host: 192.168.43.132
+
+# DB bars for mysql
+mysql_host: ErickHunter-2
 mysql_database: agama
 mysql_user: agama
 mysql_password: !vault |
@@ -11,14 +13,18 @@ mysql_password: !vault |
           3835313934323866350a366362623335636364396538636665346465373861316564653561653130
           3766
 
-my_domain: lizard.elh #root domain // strtup_name
-master_zone: lizard.elh #master zone = db.pho file
+
+# DNS vars for bind 9
+my_domain: bogmonster.eh # root domain as strtup_name.X
+master_zone: db.bogmonster # master zone so the file  db.strtup_name
 
 dns_forwarders:
   - 8.8.8.8
   - 8.8.4.4
 
 acl_allowed_networks:
-  - 192.168.42.0/23;
-  - 127.0.0.0/8;
+  - 192.168.43.0/24 #Local net can change!
+  - 127.0.0.0/8
+  - 192.168.42.0/24
 
+  

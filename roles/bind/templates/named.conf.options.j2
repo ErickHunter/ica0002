@@ -2,7 +2,7 @@ options {
     directory "/var/cache/bind";
 
     recursion yes;
-    allow-recursion { localhost; };
+    allow-recursion { localhost; local_network; };
 
     allow-query {
         localhost;
@@ -15,10 +15,9 @@ options {
         {% endfor %}
     };
 
-    dnssec-enable no;
     dnssec-validation no;
 
-    auth-nxdomain no; # conform to RFC1035
+    #auth-nxdomain no; # conform to RFC1035
     listen-on-v6 { any; };
 };
 

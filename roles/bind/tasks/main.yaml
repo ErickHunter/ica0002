@@ -20,5 +20,43 @@
   #no_log: no #ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
   notify: Restart bind9
 
+#this is for the master zone bogmonster.fl
+- name: Template "db.bogmonster.j2" file "db.bogmonster" to remote host "/var/cache/bind/db.bogmonster"
+  template:
+    src: db.bogmonster.j2
+    dest: /var/cache/bind/db.bogmonster
+    #owner: OPTIONAL_UESR
+    #mode: OPTIONAL
+  #no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  notify: Rndc reload
+
+#this is for the named.conf.local
+- name: Template "named.conf.local.j2" file "named.conf.local" to remote host "/etc/bind/named.conf.local"
+  template:
+    src: named.conf.local.j2
+    dest: /etc/bind/named.conf.local
+    #owner: OPTIONAL_UESR
+    #mode: OPTIONAL
+  #no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  notify: Rndc reload
+
+
+#this is the resolv.conf stuff #1 stop resolv.service
+#make sure service is NOT started and NOT enabled
+- name: Set " systemd-resolved.service" state "stopped" and enabled "no"
+  service:
+    name:  systemd-resolved.service
+    state: stopped
+    enabled: no  
+
+#this is the resolv.conf stuff #2 template over the new resolv.conf
+- name: Template "resolv.conf" file "resolv.conf.j2" to remote host "/etc/resolv.conf"
+  template:
+    src: resolv.conf.j2
+    dest: /etc/resolv.conf
+    #owner: OPTIONAL_UESR
+    #mode: OPTIONAL
+  #no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+
 - debug:
     msg: "{% for vm in groups['all'] %} nameserver {{ hostvars[vm]['ansible_default_ipv4']['address'] }}{% endfor %}"
