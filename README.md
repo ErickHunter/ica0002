@@ -84,3 +84,8 @@ Wait until virtual machine reboots, connect via SSH and verify that the uWSGI se
 
 
 If you ever get the error ModuleNotFoundError: No module named 'MySQLdb' check lab 4 readme and search the error.
+
+
+Some useful things for trobleshooting DNS
+nslookup google.com 
+tail -f /var/log/syslog
