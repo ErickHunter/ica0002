@@ -1,0 +1,20 @@
+# Global configuration
+global:
+  scrape_interval:     10s # Scrape targets every 10 seconds.
+  evaluation_interval: 10s # Evaluate rules every 10 seconds.
+
+# Scrape configurations
+scrape_configs:
+  # Prometheus itself
+  - job_name: /prometheus/metrics
+    metrics_path: /prometheus/metrics
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Linux hosts
+  - job_name: linux
+    static_configs:
+      - targets:
+        {% for vm in groups['all'] %}
+        - {{ vm }}:9100
+        {% endfor %}

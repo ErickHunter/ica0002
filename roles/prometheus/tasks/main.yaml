@@ -1,0 +1,26 @@
+---
+- name: Install "prometheus"
+  apt:
+    name: prometheus
+    state: latest
+    update_cache: no
+
+#Prometheus really dosn't like when it's config is .yaml, .yml works better here.
+- name: Template "prometheus.yml" file "prometheus.yml.j2" to remote host "prometheus.yml"
+  template:
+    src: prometheus.yaml.j2
+    dest: /etc/prometheus/prometheus.yml
+#    owner: OPTIONAL_UESR
+#    mode: OPTIONAL
+#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  notify: Restart prometheus
+
+# this make Promethus avalable from outside via ARGS,
+- name: Template "prometheus" file "prometheus.j2" to remote host "/etc/default/prometheus"
+  template:
+    src: prometheus.j2
+    dest: /etc/default/prometheus
+#    owner: OPTIONAL_UESR
+#    mode: OPTIONAL
+#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  notify: Restart prometheus
