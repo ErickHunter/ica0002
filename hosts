@@ -1,5 +1,5 @@
-ErickHunter-1 ansible_host=193.40.156.67 ansible_port=2122 ansible_user=ubuntu
-ErickHunter-2 ansible_host=193.40.156.67 ansible_port=12622 ansible_user=ubuntu
+ErickHunter-1 ansible_host=193.40.156.67 ansible_port=5322 ansible_user=ubuntu
+ErickHunter-2 ansible_host=193.40.156.67 ansible_port=7122 ansible_user=ubuntu
 
 
 [db_servers]
@@ -11,4 +11,7 @@ ErickHunter-1
 [dns_servers]
 ErickHunter-2
 ErickHunter-1
+
+[prometheus_servers]
+ErickHunter-2
 

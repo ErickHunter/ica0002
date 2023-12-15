@@ -7,11 +7,13 @@
     update_cache: yes
 
 
-
-- name: Copy file "defult" to remote host "nginx/sites-enabled"
-  copy:
-    src: default
+- name: Template "defult" file "defult.j2" to remote host "TO"
+  template:
+    src: default.j2
     dest: /etc/nginx/sites-enabled/default
+#    owner: OPTIONAL_UESR
+#    mode: OPTIONAL
+#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
   notify: Restart nginx
 
 

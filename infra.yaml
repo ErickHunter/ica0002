@@ -21,4 +21,10 @@
       - uwsgi
       - nginx
 
+  - name: Prometheus
+    hosts: prometheus_servers
+    roles:
+        - prometheus
+        - nginx
+
 

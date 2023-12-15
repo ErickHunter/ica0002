@@ -19,3 +19,12 @@
 #    key: "{{ item.key }}"
 #    validate_certs: False
 #  loop: "{{ users }}"
+
+
+#This is for the node exporter for vm metrics, as per lab this is in the init role.
+- name: Install "prometheus-node-exporter"
+  apt:
+    name: prometheus-node-exporter
+    state: latest
+    update_cache: no
+    
