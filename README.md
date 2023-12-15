@@ -73,6 +73,8 @@ Checked Services
 - [ ] uwsgi
 - [ ] MySql
 - [ ] bind9
+- [ ] prometheus
+- [ ] node exporter
 
 
 
