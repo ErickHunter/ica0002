@@ -8,7 +8,7 @@
 #Prometheus really dosn't like when it's config is .yaml, .yml works better here.
 - name: Template "prometheus.yml" file "prometheus.yml.j2" to remote host "prometheus.yml"
   template:
-    src: prometheus.yaml.j2
+    src: prometheus.yml.j2
     dest: /etc/prometheus/prometheus.yml
 #    owner: OPTIONAL_UESR
 #    mode: OPTIONAL
