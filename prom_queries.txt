@@ -1,0 +1,5 @@
+# Query for memory consumption for each VM
+sum by (instance) (node_memory_MemTotal_bytes - node_memory_MemFree_bytes)
+
+# Query for average CPU load for each VM
+avg  by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m]))

@@ -1,5 +1,4 @@
 ---
-
 #- name: Ansible ping module
 #  ansible.builtin.ping:
 
@@ -27,4 +26,16 @@
     name: prometheus-node-exporter
     state: latest
     update_cache: no
-    
+
+
+- name: Set "prometheus-node-exporter" state "started" and enabled "yes"
+  service:
+    name: prometheus-node-exporter
+    state: started
+    enabled: yes
+
+#this was part of lab7 so that you don't get issues with installing grafana.
+- name: Ensure ca-certificates is installed at a specific version
+  apt:
+    name: ca-certificates=20230311ubuntu0.20.04.1
+    state: present

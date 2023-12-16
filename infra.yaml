@@ -27,4 +27,10 @@
         - prometheus
         - nginx
 
+  - name: grafana
+    hosts: all
+    roles:
+        - init
+        - grafana
+
 

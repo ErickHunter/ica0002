@@ -20,4 +20,13 @@ server {
         }      
     {% endif %}
 
+    {% if inventory_hostname in groups['grafana_servers'] %}
+        location /grafana {
+            proxy_pass http://localhost:3000;
+            proxy_set_header Host $http_host;
+        }      
+    {% endif %}
+
+    
+
 }

@@ -60,3 +60,17 @@
 
 - debug:
     msg: "{% for vm in groups['all'] %} nameserver {{ hostvars[vm]['ansible_default_ipv4']['address'] }}{% endfor %}"
+
+
+#Next things are for the BIND exproter.
+- name: Install "prometheus-bind-exporter"
+  apt:
+    name: prometheus-bind-exporter
+    state: latest
+    update_cache: no
+
+- name: Set "prometheus-bind-exporter" state "started" and enabled "yes"
+  service:
+    name: prometheus-bind-exporter
+    state: started
+    enabled: yes  

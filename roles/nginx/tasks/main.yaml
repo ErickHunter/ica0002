@@ -23,3 +23,32 @@
     state: started
     enabled: yes  
   
+#Next things are for the Nginx exporter
+- name: Install "prometheus-nginx-exporter"
+  apt:
+    name: prometheus-nginx-exporter
+    state: latest
+    update_cache: no
+
+- name: Template "exporter" file "exporter.j2" to remote host "/etc/nginx/sites-enabled/exporter"
+  template:
+    src: exporter.j2
+    dest: /etc/nginx/sites-enabled/exporter
+#    owner: OPTIONAL_UESR
+#    mode: OPTIONAL
+#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  notify: 
+    - Reload systemd daemon
+    - Restart prometheus-nginx-exporter
+    - Restart nginx # This is requried too
+
+#Handlers need to be run before makeing it a service again.
+- name: Flush Handlers to run them now so "SERVICE" can become a servie.
+  meta: flush_handlers
+
+- name: Set "prometheus-nginx-exporter" state "started" and enabled "yes"
+  service:
+    name: prometheus-nginx-exporter
+    state: started
+    enabled: yes  
+

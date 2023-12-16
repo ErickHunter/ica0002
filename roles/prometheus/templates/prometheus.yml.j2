@@ -18,3 +18,25 @@ scrape_configs:
         {% for vm in groups['all'] %}
         - {{ vm }}:9100
         {% endfor %}
+
+  - job_name: mysql-exporter
+    static_configs:
+      - targets:
+        {% for vm in groups['db_servers'] %}
+        - {{ vm }}:9104
+        {% endfor %}
+
+  - job_name: prometheus-bind-exporter
+    static_configs:
+      - targets:
+        {% for vm in groups['dns_servers'] %}
+        - {{ vm }}:9119
+        {% endfor %}
+
+  - job_name: prometheus-nginx-exporter
+    static_configs:
+      - targets:
+        {% for vm in groups['all'] %}
+        - {{ vm }}:9113
+        {% endfor %}
+
