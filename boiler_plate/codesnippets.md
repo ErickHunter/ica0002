@@ -30,6 +30,20 @@
     state: started
     enabled: yes  
 
+#Make file or directory "path/to/dir/or/file"
+- name: Make "DIRECTORY/FILE" at "PATH" 
+  file:
+    path: /TO/PATH/OF
+    state: directory
+
+- name: Create user(s)
+  user:
+    name: "{{ item.name }}"
+  loop: "{{ users }}"
+
+#Some reminder why your flushing handlers, change name as needed.
+- name: Flush Handlers to run them now so "SERVICE" can become a servie.
+  meta: flush_handlers
 
 
 ##These are for handelers
