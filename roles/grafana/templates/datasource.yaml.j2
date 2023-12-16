@@ -1,0 +1,10 @@
+# config file version
+apiVersion: 1
+
+datasources:
+ - name: prometheus
+   type: prometheus
+   url: http://erickhunter-2:9090/prometheus
+   basicAuth: false # set to true if  Prometheus server requires basic authentication
+   isDefault: true
+   editable: true

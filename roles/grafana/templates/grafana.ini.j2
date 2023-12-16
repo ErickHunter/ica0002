@@ -1,0 +1,21 @@
+[server]
+root_url = http://{{ ansible_host }}:{{ ansible_port + 58 }}/grafana/
+serve_from_sub_path = true
+http_origin = http://localhost:3000
+
+
+#################################### Security ####################################
+[security]
+# default admin user, created on startup
+;admin_user = admin
+
+# default admin password, can be changed before first start of grafana,  or in profile settings
+admin_password = {{ grafana_admin_password }}
+
+#FYI grafana.ini can only chagne the admin pass when grafana is freshly installed. 
+#otherwise you gotta do sudo grafana-cli admin reset-admin-password somepassword.
+
+
+######USERS#########
+# Default role new users will be automatically assigned (if disabled above is set to true)
+;auto_assign_org_role = Viewer
