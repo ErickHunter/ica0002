@@ -1,36 +1,65 @@
 ---
-  - name: Initial setup
-    hosts: all
-    roles:
-      - init
+- name: Initial setup
+  hosts: all
+  roles:
+    - init
+  tags:
+    - initial_setup
 
-  - name: DNS Server
-    hosts: dns_servers
-    roles:
-      - bind
+- name: DNS Server
+  hosts: dns_servers
+  roles:
+    - bind
+  tags:
+    - dns_server
 
-  - name: Database Server
-    hosts: db_servers
-    roles:
-      - mysql
+- name: Database Server
+  hosts: db_servers
+  roles:
+    - mysql
+  tags:
+    - database_server
 
-  - name: Nginx
-    hosts: web_servers
-    roles:
-      - agama
-      - uwsgi
+- name: Nginx
+  hosts: web_servers
+  roles:
+    - agama
+    - uwsgi
+    - nginx
+  tags:
+    - nginx
+
+- name: Prometheus
+  hosts: prometheus_servers
+  become: yes
+  roles:
+      - prometheus
       - nginx
+  tags:
+    - prometheus
 
-  - name: Prometheus
-    hosts: prometheus_servers
-    roles:
-        - prometheus
-        - nginx
+- name: grafana
+  hosts: all
+  roles:
+      - init
+      - grafana
+  tags:
+    - grafana
 
-  - name: grafana
-    hosts: all
-    roles:
-        - init
-        - grafana
+- name: InfluxDB and Telegraf
+  hosts: influxdb_servers
+  roles:
+    - influxdb
+  tags:
+    - influxdb
 
+- name: Pinger
+  hosts: pinger
+  become: yes
+  roles:
+    - pinger
+  tags:
+    - pinger
+
+  
 

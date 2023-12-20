@@ -8,3 +8,15 @@ datasources:
    basicAuth: false # set to true if  Prometheus server requires basic authentication
    isDefault: true
    editable: true
+
+ - name: InfluxDB
+   type: influxdb
+   url: http://erickhunter-1.{{ my_domain }}:8086
+   database: latency
+   editable: true
+
+ - name: InfluxDB-telegraf
+   type: influxdb
+   url: http://erickhunter-1.{{ my_domain }}:8086
+   database: telegraf
+   editable: true

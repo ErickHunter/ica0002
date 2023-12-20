@@ -1,0 +1,55 @@
+---
+- name: Get the influx and telegraf repo key via apt_key
+  apt_key:
+   url: https://repos.influxdata.com/influxdata-archive.key
+   state: present
+
+- name: Install influx and telegraf repo
+  apt_repository:
+    repo: deb https://repos.influxdata.com/debian focal stable
+    state: present
+
+- name: Install "influxdb"
+  apt:
+    name: influxdb
+    state: latest
+    update_cache: no
+
+- name: Set "influxdb" state "started" and enabled "yes"
+  service:
+    name: influxdb
+    state: started
+    enabled: yes  
+
+#TELEGRAF below this line
+- name: Install "telegraf"
+  apt:
+    name: telegraf
+    state: latest
+    update_cache: no
+
+#InfluxDB request logging supression
+- name: Template "influxdb.conf" file "influxdb.conf.j2" to remote host "/etc/influxdb/influxdb.conf"
+  template:
+    src: influxdb.conf.j2
+    dest: /etc/influxdb/influxdb.conf
+#    owner: OPTIONAL_UESR
+#    mode: OPTIONAL
+#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  notify: Restart influxdb
+
+#Telegraf config
+- name: Template "telegraf.conf" file "telegraf.conf.j2" to remote host "/etc/telegraf/telegraf.conf"
+  template:
+    src: telegraf.conf.j2
+    dest: /etc/telegraf/telegraf.conf
+#    owner: OPTIONAL_UESR
+#    mode: OPTIONAL
+#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  notify: Restart telegraf
+
+- name: Set "telegraf" state "started" and enabled "yes"
+  service:
+    name: telegraf
+    state: started
+    enabled: yes

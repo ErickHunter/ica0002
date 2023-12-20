@@ -1,0 +1,63 @@
+---
+- name: Create user(s) "pinger"
+  user:
+    name: pinger
+
+- name: Install "fping"
+  apt:
+    name: fping
+    state: latest
+    update_cache: no
+
+- name: Make "DIRECTORY" at "/etc/pinger" 
+  file:
+    path: /etc/pinger
+    state: directory
+
+- name: Make "DIRECTORY" at "/usr/local/bin/pinger" 
+  file:
+    path: /usr/local/bin/pinger
+    owner: pinger
+    state: directory
+
+- name: Template "pinger.sh" file "pinger.sh.j2" to remote host "/usr/local/bin/pinger/"
+  template:
+    src: pinger.sh.j2
+    dest: /usr/local/bin/pinger/pinger.sh
+    owner: pinger
+    group: pinger
+    mode: 0777
+#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  notify:
+    - Reload daemons
+    - Restart pinger
+
+- name: Template "pinger.conf" file "pinger.conf.j2" to remote host "/etc/pinger/pinger.conf"
+  template:
+    src: pinger.conf.j2
+    dest: /etc/pinger/pinger.conf
+#    owner: pinger
+    mode: 0777
+#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  notify:
+    - Reload daemons
+    - Restart pinger
+
+#Template the service configuration file
+- name: Template "pinger.service" file "pinger.service.j2" to remote host "/etc/systemd/system/pinger.service"
+  template:
+    src: pinger.service.j2
+    dest: /etc/systemd/system/pinger.service
+#    owner: pinger
+    mode: 0777
+#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  notify:
+    - Reload daemons
+    - Restart pinger
+
+- name: Set "pinger" state "started" and enabled "yes"
+  become: yes
+  service:
+    name: pinger
+    state: started
+    enabled: yes 
