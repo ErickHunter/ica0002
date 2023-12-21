@@ -76,3 +76,21 @@
     generate_ssh_key: yes
     ssh_key_bits: 2048
     ssh_key_file: .ssh/id_rsa
+
+- name: Add known hosts at /home/backup/.ssh/known_hosts
+  template:
+    src: known_hosts.j2
+    dest: /home/backup/.ssh/known_hosts
+    mode: 0744
+    owner: "{{ backup_user }}"
+    #group: "{{ backup_user }}"
+
+#This makes sure that the backup server is in known hosts.
+- name: Template "known_hosts" file "known_hosts.j2" to remote host "/home/backup/.ssh/known_hosts"
+  template:
+    src: known_hosts.j2
+    dest: /home/backup/.ssh/known_hosts
+    owner: backup
+    mode: 0744
+#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+#  notify: HANDLER
