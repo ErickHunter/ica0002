@@ -64,4 +64,15 @@
   service:
     name: rsyslog
     state: started
-    enabled: yes  
+    enabled: yes
+
+
+#This stuff is for running backups
+- name: Create user "backup" and generate its keys
+  user:
+    name: backup
+    home: /home/backup
+    shell: /bin/bash
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
