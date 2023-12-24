@@ -58,8 +58,8 @@
 #Below this line is the InfluxDB stats exporter.
 - name: Download "influx_stats_exporter_linux_amd64"
   get_url:
-    url: URL/TO/THING/TO/GET
-    dest: PATH/TO/DEST
+    url: https://github.com/carlpett/influxdb_stats_exporter/releases/download/v0.1.1/influx_stats_exporter_linux_amd64
+    dest: /usr/local/bin/
 
 - name: Setting mode "0755" "/usr/local/bin/influx_stats_exporter_linux_amd64"
   file:
@@ -71,7 +71,7 @@
     src: prometheus-influxdb-stats-exporter.service.j2
     dest: /etc/systemd/system/prometheus-influxdb-stats-exporter.service
     owner: prometheus
-    mode: prometheus
+    group: prometheus
 #  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
   notify:
     - Reload daemons

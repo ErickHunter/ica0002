@@ -70,7 +70,7 @@
 #This stuff is for running backups
 - name: Create user "backup" and generate its keys
   user:
-    name: backup
+    name: "{{ backup_user }}"
     home: /home/backup
     shell: /bin/bash
     generate_ssh_key: yes

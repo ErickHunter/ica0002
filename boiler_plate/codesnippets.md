@@ -19,6 +19,7 @@
     src: FROM
     dest: TO/HERE
     owner: OPTIONAL_UESR
+    group: OPTIONAL_GROUP
     mode: OPTIONAL
   no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
   notify: HANDLER
