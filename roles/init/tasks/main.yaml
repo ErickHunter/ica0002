@@ -68,6 +68,12 @@
 
 
 #This stuff is for running backups
+- name: Install "duplicity"
+  apt:
+    name: duplicity
+    state: latest
+    update_cache: no
+
 - name: Create user "backup" and generate its keys
   user:
     name: "{{ backup_user }}"
@@ -76,6 +82,17 @@
     generate_ssh_key: yes
     ssh_key_bits: 2048
     ssh_key_file: .ssh/id_rsa
+
+- name: Create backup user directorys
+  file:
+    path: /home/backup/{{ item }}
+    state: directory
+    mode: 0744
+    owner: "{{ backup_user }}"
+    #group: "{{ backup_user }}"
+  loop:
+    - restore
+    - .ssh
 
 - name: Add known hosts at /home/backup/.ssh/known_hosts
   template:
@@ -94,3 +111,9 @@
     mode: 0744
 #  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
 #  notify: HANDLER
+
+- name: Set "cron" state "started" and enabled "yes"
+  service:
+    name: cron
+    state: started
+    enabled: yes  

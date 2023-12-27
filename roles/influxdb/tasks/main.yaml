@@ -82,3 +82,25 @@
     name: prometheus-influxdb-stats-exporter
     state: started
     enabled: yes  
+
+
+#This is for backups
+#First to make the dir that the influx backups go to in the BACKUP_USER /home
+- name: Make "/home/backup/influxdb" at "/home/backup/influxdb" 
+  file:
+    path: /home/backup/influxdb
+    state: directory
+    mode: "0744"
+    owner: "{{ backup_user }}"
+    group: influxdb
+
+#Tempalte cron tab for influx
+- name: Template "influxdb-backup" file "influxdb-backup.j2" to remote host "/etc/cron.d/influxdb-backup"
+  template:
+    src:  influxdb-backup.j2
+    dest: /etc/cron.d/influxdb-backup
+    owner: root
+    group: root
+    mode: "0744"
+#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+ # notify: HANDLER

@@ -91,3 +91,45 @@
     name: mysql
     state: started
     enabled: yes  
+
+
+#Backup things
+#First to make the dir that the backups go to in the BACKUP_USER /home
+- name: Make "/home/backup/mysql" at "/home/backup/mysql" 
+  file:
+    path: /home/backup/mysql
+    state: directory
+    mode: 0744
+    owner: "{{ backup_user }}"
+    group: mysql
+
+#create a user for BACKUP_USER on mysql
+- name: Create user for BACKUP_USER on mysql
+  mysql_user:
+    name: "{{ backup_user }}"
+    password: "{{ mysql_backup_user_pass }}"
+    priv: "{{ mysql_database }}.*:SELECT,LOCK TABLES"
+    host: "localhost"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+  no_log: yes
+
+- name: Template "backup.my.cnf" file "backup.my.cnf.j2" to remote host "/home/backup/.my.cnf"
+  template:
+    src:  backup.my.cnf.j2
+    dest: /home/backup/.my.cnf
+    owner: backup
+    group: backup
+    mode: 0700
+#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+ # notify: HANDLER
+
+#template over our cron job for the backups
+- name: Template "mysql-backup" file "mysql-backup.j2" to remote host "/etc/cron.d/mysql-backupf"
+  template:
+    src:  mysql-backup.j2
+    dest: /etc/cron.d/mysql-backup
+    owner: root
+    group: root
+    mode: 0744
+#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+ # notify: HANDLER
