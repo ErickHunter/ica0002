@@ -78,19 +78,6 @@
 - name: Flush Handlers to run them now so "prometheus-mysqld-exporter" can become a servie.
   meta: flush_handlers
 
-#MySQL export start and enabled.
-- name: Set "prometheus-mysqld-exporter" state "started" and enabled "yes"
-  service:
-    name: prometheus-mysqld-exporter
-    state: started
-    enabled: yes  
-
-#MySQL start and enabled now here.
-- name: Set "mysql" state "started" and enabled "yes"
-  service:
-    name: mysql
-    state: started
-    enabled: yes  
 
 
 #Backup things
@@ -123,13 +110,51 @@
 #  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
  # notify: HANDLER
 
-#template over our cron job for the backups
-- name: Template "mysql-backup" file "mysql-backup.j2" to remote host "/etc/cron.d/mysql-backupf"
+# Cronjob tasks here
+- name: Add cron jobs
+  ansible.builtin.cron:
+    name: "{{ item.name }}"
+    job: "{{ item.job }}"
+    minute: "{{ item.minute }}"
+    hour: "{{ item.hour }}"
+    weekday: "{{ item.weekday }}"
+    user: "{{ backup_user }}"
+    state: present
+  loop: "{{ cron_jobs }}"
+
+#Mysql HA setup thing for LAB11 go here
+#This is to add a config to the exporter so that it exports replication metrics.
+- name: Template "prometheus-mysqld-exporter" file "-" to remote host "/etc/default/prometheus-mysqld-exporter"
   template:
-    src:  mysql-backup.j2
-    dest: /etc/cron.d/mysql-backup
-    owner: root
-    group: root
-    mode: 0744
+    src: prometheus-mysqld-exporter.j2
+    dest: /etc/default/prometheus-mysqld-exporter
+#    owner: OPTIONAL_UESR
+#    group: OPTIONAL_GROUP
+#    mode: OPTIONAL
 #  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
- # notify: HANDLER
+  notify: Restart prometheus-mysqld-exporter
+
+- name: MySQL user for exporter
+  community.mysql.mysql_user:
+    name: "{{ MySQL_exporter_user }}"
+    password: "{{ MySQL_exporter_user_password }}"
+    priv: "*.*:PROCESS,REPLICATION CLIENT,SELECT"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+#We need to run handlers now
+- name: Flush Handlers to run them now.
+  meta: flush_handlers
+
+#MySQL export start and enabled.
+- name: Set "prometheus-mysqld-exporter" state "started" and enabled "yes"
+  service:
+    name: prometheus-mysqld-exporter
+    state: started
+    enabled: yes  
+
+#MySQL start and enabled now here.
+- name: Set "mysql" state "started" and enabled "yes"
+  service:
+    name: mysql
+    state: started
+    enabled: yes  

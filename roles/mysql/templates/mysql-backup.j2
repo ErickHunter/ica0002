@@ -1,8 +1,0 @@
-# Dump agama db an hour before backups start
-00 20 * * * backup mysqldump agama > /home/backup/mysql/agama.sql
-
-# Full backup on every monday 
-00 21 * * Mon backup  duplicity --no-encryption full /home/backup/mysql/ rsync://ErickHunter@backup.{{ my_domain }}/mysql
-
-# Incremental backup at 21:00 every day except Mondays.
-00 21 * * 2-6,0 backup  duplicity --no-encryption incremental /home/backup/mysql/ rsync://ErickHunter@backup.{{ my_domain }}/mysql

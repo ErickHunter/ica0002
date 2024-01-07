@@ -65,4 +65,5 @@
 
 #this is for running as shell
 - name: Reload daemons
-  shell: systemctl Yourcommandhere
+  shell: systemctl Yourcommandhere  
+  

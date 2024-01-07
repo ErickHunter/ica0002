@@ -1,0 +1,20 @@
+---
+# these are cron jobs, for testing you can set hour and weekday to "*" then set minute to "*/2" in this case it means to run every 2 min. 
+cron_jobs:
+  - name: "Agama Database Backup"
+    job: "mysqldump agama > /home/backup/mysql/agama.sql"
+    minute: "*/4"        # Run at minute "0"
+    hour: "*"         # Run at hour "20" (8:00 PM)
+    weekday: "*"       # Every day of the week "*"
+
+  - name: "Full Backup"
+    job: "duplicity --no-encryption full /home/backup/mysql/ rsync://ErickHunter@backup.{{ my_domain }}/mysql > /tmp/backup.log 2>&1 && echo Backup completed successfully at $(date) >> /tmp/backup.log"
+    minute: "*/10"        # Run at minute "0"
+    hour: "*"         # Run at hour "21" (9:00 PM)
+    weekday: "*"       # Only on Mondays "1" (1 is Monday in cron syntax)
+
+  - name: "Incremental Backup"
+    job: "duplicity --no-encryption incremental /home/backup/mysql/ rsync://ErickHunter@backup.{{ my_domain }}/mysql > /tmp/backup.log 2>&1 && echo IncermentalBackup completed successfully at $(date) >> /tmp/backup.log"
+    minute: "*/5"        # Run at minute "0"
+    hour: "*"         # Run at hour "21" (9:00 PM)
+    weekday: "*"   # Every day except Mondays "2-6,0" (2-6 corresponds to Tuesday to Saturday, 0 corresponds to Sunday)
