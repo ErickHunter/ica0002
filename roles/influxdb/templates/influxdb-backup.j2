@@ -1,11 +1,13 @@
 # As defined in backup SLA, backups are done every day at 21:00(UTC)/23:00(UTC+2 Tallinn)
 
-# Dump all influx database telegraf an hour before backups upload.
-00 20 * * * backup  rm -rf /home/backup/influxdb/*; influxd backup -portable -database telegraf /home/backup/influxdb/telegraf;
+*/1 * * * * backup echo Cronisworking > /tmp/influx_backup.log
+
+# Dump all influx database telegraf an hour before backups upload. 00 20 * * *
+*/2 * * * * backup rm -rf /home/backup/influxdb/*; influxd backup -portable -database telegraf /home/backup/influxdb
 
 
-# Full backup on every monday 
-00 21 * * Mon backup  duplicity --no-encryption full /home/backup/influxdb/ rsync://ErickHunter@backup.{{ my_domain }}/influxdb
+# Full backup on every monday 00 21 * * Mon
+*/3 * * * * backup duplicity --no-encryption full /home/backup/influxdb/ rsync://ErickHunter@backup.{{ my_domain }}/influxdb
 
-# Incremental backup at 21:00 every day except Mondays.
-00 21 * * 2-6,0 backup  duplicity --no-encryption incremental /home/backup/influxdb/ rsync://ErickHunter@backup.{{ my_domain }}/influxdb
+# Incremental backup at 21:00 every day except Mondays. 00 21 * * 2-6,0
+*/4 * * * * backup duplicity --no-encryption incremental /home/backup/influxdb/ rsync://ErickHunter@backup.{{ my_domain }}/influxdb
