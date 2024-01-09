@@ -9,4 +9,27 @@
     name: prometheus-mysqld-exporter
     state: restarted
 
+# LAB 11 Stuff
 
+- name: Reset MySQL source
+  mysql_replication:
+    mode: "{{ item }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+  loop:
+    - stopreplica
+    - resetprimary
+  when: inventory_hostname == mysql_host
+
+- name: Reset MySQL replica
+  mysql_replication:
+    mode: "{{ item }}"
+    primary_host: "{{ mysql_host }}"
+    primary_user: replication
+    primary_password: "{{ replication_user_pass }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+  loop:
+    - stopreplica
+    - changeprimary
+    - resetreplica
+    - startreplica
+  when: inventory_hostname != mysql_host

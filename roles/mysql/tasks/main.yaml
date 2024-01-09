@@ -5,10 +5,11 @@
     state: latest
     update_cache: no
 
-- name: Copy file "override.cnf" to remote host "/etc/mysql/mysql.conf.d/override.cnf"
-  copy:
-    src: override.cnf
+- name: Copy file "override.cnf.j2" to remote host "/etc/mysql/mysql.conf.d/override.cnf"
+  template:
+    src: override.cnf.j2
     dest: /etc/mysql/mysql.conf.d/override.cnf
+    mode: 0744
   notify: Restart mysql
 
 #MySQL start and enabled moved to bottom
@@ -119,9 +120,17 @@
     hour: "{{ item.hour }}"
     weekday: "{{ item.weekday }}"
     user: "{{ backup_user }}"
-    state: present
+    state: "{{ 'present' if inventory_hostname == mysql_backup_host else 'absent' }}"
   loop: "{{ cron_jobs }}"
 
+- debug:
+    var: inventory_hostname
+
+- debug:
+    var: mysql_backup_host
+
+
+# LAB-11 TASK 1 for replication metric exporoting.
 #Mysql HA setup thing for LAB11 go here
 #This is to add a config to the exporter so that it exports replication metrics.
 - name: Template "prometheus-mysqld-exporter" file "-" to remote host "/etc/default/prometheus-mysqld-exporter"
@@ -151,6 +160,34 @@
     name: prometheus-mysqld-exporter
     state: started
     enabled: yes  
+
+# LAB-11 Task 3
+- name: Create "MySQL" replication user
+  mysql_user:
+    name: replication
+    password: "{{ replication_user_pass }}"
+    priv: "*.*:REPLICATION SLAVE"
+    host: "%"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+  no_log: true
+
+# LAB-11 Task 6
+
+- name: Make replication read only
+  mysql_variables:
+    variable: read_only
+    value: "{{ 'OFF' if inventory_hostname == mysql_host else 'ON' }}"
+    mode: persist
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+  notify:
+    - Reset MySQL source
+    - Reset MySQL replica
+
+- name: Start mysql
+  service:
+    name: mysql
+    state: started
+    enabled: yes
 
 #MySQL start and enabled now here.
 - name: Set "mysql" state "started" and enabled "yes"

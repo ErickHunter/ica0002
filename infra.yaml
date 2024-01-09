@@ -19,6 +19,7 @@
     - mysql
   tags:
     - database_server
+    - m
 
 - name: Nginx
   hosts: web_servers
@@ -28,6 +29,7 @@
     - nginx
   tags:
     - nginx
+    - x
 
 - name: Prometheus
   hosts: prometheus_servers
