@@ -1,5 +1,5 @@
-ErickHunter-1 ansible_host=193.40.156.67 ansible_port=16322 ansible_user=ubuntu
-ErickHunter-2 ansible_host=193.40.156.67 ansible_port=5322 ansible_user=ubuntu
+ErickHunter-1 ansible_host=193.40.156.67 ansible_port=44822 ansible_user=ubuntu
+ErickHunter-2 ansible_host=193.40.156.67 ansible_port=42722 ansible_user=ubuntu
 
 
 [db_servers]
@@ -8,6 +8,9 @@ ErickHunter-1
 
 [web_servers]
 ErickHunter-1
+
+[internal_web_servers]
+ErickHunter-2
 
 [dns_servers]
 ErickHunter-2

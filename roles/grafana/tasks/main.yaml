@@ -1,65 +1,45 @@
 ---
-- name: Get the grafana repo key via apt_key
-  apt_key:
-   url: https://packages.grafana.com/gpg.key
-   state: present
+- name: Check if nessary directories for grafana exist if not create
+  file:
+    path: '{{ item }}'
+    recurse: yes
+    state: directory
+  loop:
+    - /opt/grafana/provisioning/dashboards
+    - /opt/grafana/provisioning/datasources
 
-- name: Install grafana repo
-  apt_repository:
-    repo: deb https://packages.grafana.com/oss/deb stable main
-    state: present
-
-- name: Install "grafana"
-  apt:
-    name: grafana
-    state: latest
-    update_cache: no
-  
-- name: Template "grafana.ini" file "grafana.ini.j2" to remote host "/etc/grafana/grafana.ini"
+- name: Teplate "grafana.ini" to /opt/grafana/grafana.ini
   template:
     src: grafana.ini.j2
-    dest: /etc/grafana/grafana.ini
-#    owner: OPTIONAL_UESR
-#    mode: OPTIONAL
-  no_log: yes #ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
-  notify: Restart grafana-server
+    dest: /opt/grafana/grafana.ini
+  notify: Restart grafana docker
 
-- name: Set "grafana-server" state "started" and enabled "yes"
-  service:
-    name: grafana-server
-    state: started
-    enabled: yes  
-
-
-#Provisioning things.
-- name: Template "datasource.yaml" file "datasource.yaml.j2" to remote host "/etc/grafana/provisioning/datasources/datasource.yaml"
+- name: Copy datasource.yaml to grafana
   template:
     src: datasource.yaml.j2
-    dest: /etc/grafana/provisioning/datasources/datasource.yaml
-#    owner: OPTIONAL_UESR
-#    mode: OPTIONAL
-#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
-  notify: Restart grafana-server
+    dest: /opt/grafana/provisioning/datasources/datasource.yaml
+  notify: Restart grafana docker
 
-- name: Template "dashboard.yaml" file "dashboard.yaml.j2" to remote host "/etc/grafana/provisioning/dashboards/dashboard.yaml"
+- name: Copy dashboard.yaml to grafana
   template:
     src: dashboard.yaml.j2
-    dest: /etc/grafana/provisioning/dashboards/dashboard.yaml
-#    owner: OPTIONAL_UESR
-#    mode: OPTIONAL
-#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
-  notify: Restart grafana-server
+    dest: /opt/grafana/provisioning/dashboards/dashboard.yaml
+  notify: Restart grafana docker
 
-- name: Make "DIRECTORY" at "/var/lib/grafana/dashboards" 
-  file:
-    path: /var/lib/grafana/dashboards
-    state: directory
-
-- name: Copy file "main.json" to remote host "/var/lib/grafana/dashboards/main.json"
+- name: Copy grafana dashboards
   copy:
-    src: main.json
-    dest: /var/lib/grafana/dashboards/main.json
-  notify: Restart grafana-server
+    src: "{{ item }}.json"
+    dest: "/opt/grafana/provisioning/dashboards/{{ item }}.json"
+  loop:
+    - main
+    - syslog
+    - mysql
+  notify: Restart grafana docker
 
-
-#need to precreate user form GH credentails somehow.
+- name: Grafana Docker container
+  community.docker.docker_container:
+    name: grafana
+    image: grafana/grafana
+    published_ports: "{{ grafana_port }}:3000"
+    volumes: /opt/grafana:/etc/grafana
+    restart_policy: always # need this so it runs again on reboot

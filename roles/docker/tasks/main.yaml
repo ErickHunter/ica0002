@@ -1,0 +1,12 @@
+---
+- name: Install docker
+  apt:
+    name:
+      - python3-docker
+      - docker.io
+
+- name: Set "docker" state "started" and enabled "yes"
+  service:
+    name: docker
+    state: started
+    enabled: yes  

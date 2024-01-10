@@ -21,16 +21,6 @@
     - database_server
     - m
 
-- name: Nginx
-  hosts: web_servers
-  roles:
-    - agama
-    - uwsgi
-    - nginx
-  tags:
-    - nginx
-    - x
-
 - name: Prometheus
   hosts: prometheus_servers
   become: yes
@@ -39,14 +29,6 @@
       - nginx
   tags:
     - prometheus
-
-- name: grafana
-  hosts: all
-  roles:
-      - init
-      - grafana
-  tags:
-    - grafana
 
 - name: InfluxDB and Telegraf
   hosts: influxdb_servers
@@ -62,6 +44,37 @@
     - pinger
   tags:
     - pinger
+
+- name: Nginx
+  hosts: web_servers
+  roles:
+    - docker
+    - agama
+    - nginx
+  tags:
+    - nginx
+    - x
+
+- name: Internal web servers
+  hosts: internal_web_servers
+  become: yes
+  roles:
+      - docker
+      - nginx
+  tags:
+      - internal_web
+
+- name: grafana
+  hosts: all
+  roles:
+      - init
+      - grafana
+  tags:
+    - grafana
+
+
+
+
 
   
 
