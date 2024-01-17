@@ -95,28 +95,30 @@
     - .ssh
 
 # this is how you do knows hosts the right way.
-- name: Tell the host about our servers it might want to ssh to
-  ansible.builtin.known_hosts:
-    path: /home/backup/.ssh/known_hosts
-    name: backup.{{ my_domain }}
-    key: "backup.{{ my_domain }} {{ backup_server_ssh_key }}"
-
-- name: Tell the host about our servers it might want to ssh to
-  ansible.builtin.known_hosts:
-    path: /home/backup/.ssh/known_hosts
-    name: backup
-    key: "backup {{ backup_server_ssh_key }}"
+# nevermind this built in does not have enough pramaters to make the known_hosts owned by backup user
+#- name: Tell the host about our servers it might want to ssh to
+#  ansible.builtin.known_hosts:
+#    path: /home/backup/.ssh/known_hosts
+#    name: backup.{{ my_domain }}
+#    key: "backup.{{ my_domain }} {{ backup_server_ssh_key }}"
+#
+#- name: Tell the host about our servers it might want to ssh to
+#  ansible.builtin.known_hosts:
+#    path: /home/backup/.ssh/known_hosts
+#    name: backup
+#    key: "backup {{ backup_server_ssh_key }}"
 
 
 ##This makes sure that the backup server is in known hosts.
-#- name: Template "known_hosts" file "known_hosts.j2" to remote host "/home/backup/.ssh/known_hosts"
-#  template:
-#    src: known_hosts.j2
-#    dest: /home/backup/.ssh/known_hosts
-#    owner: backup
-#    mode: 0744
-##  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
-##  notify: HANDLER
+- name: Template "known_hosts" file "known_hosts.j2" to remote host "/home/backup/.ssh/known_hosts"
+  template:
+    src: known_hosts.j2
+    dest: /home/backup/.ssh/known_hosts
+    owner: "{{ backup_user }}"
+    group: "{{ backup_user }}"
+    mode: 0600
+#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+#  notify: HANDLER
 
 - name: Set "cron" state "started" and enabled "yes"
   service:
