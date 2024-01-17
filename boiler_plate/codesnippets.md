@@ -29,7 +29,7 @@
   service:
     name: SERVICE
     state: started
-    enabled: yes  
+    enabled: yes   
 
 # Make file or directory "path/to/dir/or/file"
 - name: Make "DIRECTORY/FILE" at "PATH" 

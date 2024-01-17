@@ -9,7 +9,7 @@
   template:
     src: override.cnf.j2
     dest: /etc/mysql/mysql.conf.d/override.cnf
-    mode: 0744
+    mode: 0644
   notify: Restart mysql
 
 #MySQL start and enabled moved to bottom

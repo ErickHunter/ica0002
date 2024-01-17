@@ -107,18 +107,18 @@
   loop: "{{ dns_a_records | dict2items }}"
   #run_once: True
 
-- name: Set CNAME records
-  when: inventory_hostname in groups["dns_masters"]
-  nsupdate:
-    key_algorithm: "hmac-sha256"
-    key_name: "nsupdate"
-    key_secret: "{{ dns_update_key }}"
-    server: "localhost"
-    zone: "{{ my_domain }}"
-    record: "{{ item.key }}"
-    type: "CNAME"
-    value: "{{ item.value }}"
-  loop: "{{ dns_cname_records | dict2items }}"
+#- name: Set CNAME records
+#  when: inventory_hostname in groups["dns_masters"]
+#  nsupdate:
+#    key_algorithm: "hmac-sha256"
+#    key_name: "nsupdate"
+#    key_secret: "{{ dns_update_key }}"
+#    server: "localhost"
+#    zone: "{{ my_domain }}"
+#    record: "{{ item.key }}"
+#    type: "CNAME"
+#    value: "{{ item.value }}"
+#  loop: "{{ dns_cname_records | dict2items }}"
 
 
 

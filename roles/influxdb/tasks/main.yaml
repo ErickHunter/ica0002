@@ -90,7 +90,7 @@
   file:
     path: /home/backup/influxdb
     state: directory
-    mode: "0744"
+    mode: "0700"
     owner: "{{ backup_user }}"
     group: influxdb
 
@@ -101,6 +101,6 @@
     dest: /etc/cron.d/influxdb-backup
     owner: root
     group: root
-    mode: "0744"
+    mode: "0644"
 #  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
  # notify: HANDLER

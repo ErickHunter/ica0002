@@ -47,4 +47,16 @@ scrape_configs:
         - {{ vm }}:9424
         {% endfor %}
   
+  - job_name: haproxy_exporter
+    static_configs:
+      - targets:
+        {% for vm in groups['haproxy'] %}
+        - '{{ vm }}:9101'
+        {% endfor %}
 
+  - job_name: keepalived_exporter
+    static_configs:
+      - targets:
+        {% for vm in groups['keepalived'] %}
+        - '{{ vm }}:9165'
+        {% endfor %}

@@ -1,5 +1,4 @@
----
-- name: Check if nessary directories for grafana exist if not create
+- name: Create necessary directories for grafana
   file:
     path: '{{ item }}'
     recurse: yes
@@ -8,25 +7,26 @@
     - /opt/grafana/provisioning/dashboards
     - /opt/grafana/provisioning/datasources
 
-- name: Teplate "grafana.ini" to /opt/grafana/grafana.ini
+- name: Template "grafana.ini" to "/opt/grafana/grafana.ini"
   template:
     src: grafana.ini.j2
     dest: /opt/grafana/grafana.ini
   notify: Restart grafana docker
 
-- name: Copy datasource.yaml to grafana
+- name: Template "datasource.yaml" to "/opt/grafana/provisioning/datasources/datasource.yaml"
   template:
     src: datasource.yaml.j2
     dest: /opt/grafana/provisioning/datasources/datasource.yaml
   notify: Restart grafana docker
 
-- name: Copy dashboard.yaml to grafana
+- name: Template "dashboard.yaml" to "/opt/grafana/provisioning/dashboards/dashboard.yaml"
   template:
-    src: dashboard.yaml.j2
+    src: dashboard.yaml
     dest: /opt/grafana/provisioning/dashboards/dashboard.yaml
   notify: Restart grafana docker
 
-- name: Copy grafana dashboards
+
+- name: Copy grafana dashboards to machine
   copy:
     src: "{{ item }}.json"
     dest: "/opt/grafana/provisioning/dashboards/{{ item }}.json"
@@ -34,6 +34,7 @@
     - main
     - syslog
     - mysql
+    - influx-syslog
   notify: Restart grafana docker
 
 - name: Grafana Docker container
@@ -42,31 +43,6 @@
     image: grafana/grafana
     published_ports: "{{ grafana_port }}:3000"
     volumes: /opt/grafana:/etc/grafana
-    restart_policy: always # need this so it runs again on reboot
+    restart_policy: always
 
-- name: Debug URL
-  debug:
-    msg: "http://{{ vm3_name }}.{{ my_domain }}/grafana"
 
-- name: Debug pass
-  debug:
-    msg: "{{ my_grafana_password }}"
-
-- name: Debug user
-  debug:
-    msg: "{{ my_grafana_user }}"
-
-#FYI your get an error if you try to create more than one user with the same name.
-#Changing pass updates users password
-- name: Create or update a Grafana user
-  community.grafana.grafana_user:
-    url: "http://{{ vm3_name }}.{{ my_domain }}/grafana"
-    url_username: admin
-    url_password: "{{ grafana_admin_password }}"
-    name: "{{ my_grafana_name }}" # Name is optional
-    email: "{{ my_grafana_email }}"
-    login: "{{ my_grafana_user }}" # login/user is is required
-    password: "{{ my_grafana_password }}"
-    is_admin: true
-    state: present
-  #no_log: true 

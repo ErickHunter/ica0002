@@ -4,19 +4,19 @@ apiVersion: 1
 datasources:
  - name: prometheus
    type: prometheus
-   url: http://erickhunter-2:9090/prometheus
+   url: http://erickhunter-3:9090/prometheus
    basicAuth: false # set to true if  Prometheus server requires basic authentication
    isDefault: true
    editable: true
 
  - name: InfluxDB
    type: influxdb
-   url: http://erickhunter-1.{{ my_domain }}:8086
+   url: http://erickhunter-3.{{ my_domain }}:8086
    database: latency
    editable: true
 
  - name: InfluxDB-telegraf
    type: influxdb
-   url: http://erickhunter-1.{{ my_domain }}:8086
+   url: http://erickhunter-3.{{ my_domain }}:8086
    database: telegraf
    editable: true
