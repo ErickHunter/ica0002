@@ -4,8 +4,8 @@
   roles:
     - init
   tags:
-    - initial_setup
-
+    - init
+    
 - name: DNS Server
   hosts: dns_servers
   roles:
@@ -45,14 +45,15 @@
   tags:
     - pinger
 
-- name: Nginx
+- name: Web servers
   hosts: web_servers
   roles:
     - docker
     - agama
-    - nginx
+    #- nginx
+    #- uwsgi
   tags:
-    - nginx
+    - application
     - x
 
 - name: Internal web servers
@@ -65,14 +66,28 @@
       - internal_web
 
 - name: grafana
-  hosts: all
+  hosts: grafana_servers
   roles:
       - init
       - grafana
   tags:
     - grafana
 
+- name: Keepalived
+  hosts: keepalived
+  become: yes
+  roles:
+      - keepalived
+  tags:
+      - keep
 
+- name: Haproxy
+  hosts: haproxy
+  become: yes
+  roles:
+      - haproxy
+  tags:
+      - ha
 
 
 
