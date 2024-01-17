@@ -12,6 +12,7 @@
     src: grafana.ini.j2
     dest: /opt/grafana/grafana.ini
   notify: Restart grafana docker
+  no_log: yes
 
 - name: Template "datasource.yaml" to "/opt/grafana/provisioning/datasources/datasource.yaml"
   template:
@@ -24,6 +25,7 @@
     src: dashboard.yaml
     dest: /opt/grafana/provisioning/dashboards/dashboard.yaml
   notify: Restart grafana docker
+  no_log: yes
 
 
 - name: Copy grafana dashboards to machine

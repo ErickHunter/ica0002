@@ -1,0 +1,1754 @@
+Wed Jan 17 20:52:13 EET 2024
++ hostname
+hedeby
++ ansible-playbook infra.yaml --diff
+
+PLAY [Initial setup] ***********************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+
+TASK [init : Update APT cache] *************************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+
+TASK [init : Install "prometheus-node-exporter"] *******************************
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [init : Set "prometheus-node-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+
+TASK [init : Ensure ca-certificates is installed at a specific version] ********
+ok: [ErickHunter-2]
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+
+TASK [init : Install "rsyslog"] ************************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+
+TASK [init : Template "50-telegraf.conf" file "50-telegraf.conf.j2" to remote host "/etc/rsyslog.d/50-telegraf.conf"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+
+TASK [init : Set "rsyslog" state "started" and enabled "yes"] ******************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+
+TASK [init : Install "duplicity"] **********************************************
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [init : Create user "backup" and generate its keys] ***********************
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [init : Create backup user directorys] ************************************
+ok: [ErickHunter-1] => (item=restore)
+ok: [ErickHunter-2] => (item=restore)
+ok: [ErickHunter-3] => (item=restore)
+ok: [ErickHunter-3] => (item=.ssh)
+ok: [ErickHunter-2] => (item=.ssh)
+ok: [ErickHunter-1] => (item=.ssh)
+
+TASK [init : Template "known_hosts" file "known_hosts.j2" to remote host "/home/backup/.ssh/known_hosts"] ***
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [init : Set "cron" state "started" and enabled "yes"] *********************
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+PLAY [DNS Server] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+
+TASK [bind : Install "prometheus-bind-exporter"] *******************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+
+TASK [bind : Set "prometheus-bind-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [bind : Install "bind9"] **************************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+
+TASK [bind : Set "bind9" state "started" and enabled "yes"] ********************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+
+TASK [bind : Install dnspython library] ****************************************
+skipping: [ErickHunter-1]
+skipping: [ErickHunter-2]
+ok: [ErickHunter-3]
+
+TASK [bind : Template "db.bogmonster.j2" file "db.bogmonster" to remote host "/var/cache/bind/db.bogmonster"] ***
+skipping: [ErickHunter-1]
+skipping: [ErickHunter-2]
+ok: [ErickHunter-3]
+
+TASK [bind : Template db.domain.reverse.j2 to /var/cache/bind/db.bogmonster.eh.reverse] ***
+skipping: [ErickHunter-1]
+skipping: [ErickHunter-2]
+ok: [ErickHunter-3]
+
+TASK [bind : Template "named.conf.options.j2" file "named.conf.options.j2" to remote host "/etc/bind/named.conf.options"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+
+TASK [bind : Template "named.conf.local.j2" file "named.conf.local" to remote host "/etc/bind/named.conf.local"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+
+TASK [bind : Set "bind9" state "started" and enabled "yes"] ********************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+
+TASK [bind : Execute handlers] *************************************************
+
+TASK [bind : Set A records] ****************************************************
+skipping: [ErickHunter-1] => (item={'key': 'backup', 'value': '192.168.42.132'}) 
+skipping: [ErickHunter-1] => (item={'key': 'cloudflare', 'value': '1.1.1.1'}) 
+skipping: [ErickHunter-1] => (item={'key': 'google', 'value': '8.8.8.8'}) 
+skipping: [ErickHunter-2] => (item={'key': 'backup', 'value': '192.168.42.132'}) 
+skipping: [ErickHunter-2] => (item={'key': 'cloudflare', 'value': '1.1.1.1'}) 
+skipping: [ErickHunter-2] => (item={'key': 'google', 'value': '8.8.8.8'}) 
+ok: [ErickHunter-3] => (item={'key': 'backup', 'value': '192.168.42.132'})
+ok: [ErickHunter-3] => (item={'key': 'cloudflare', 'value': '1.1.1.1'})
+ok: [ErickHunter-3] => (item={'key': 'google', 'value': '8.8.8.8'})
+
+TASK [bind : Execute handlers] *************************************************
+
+TASK [bind : Template "resolv.conf" file "resolv.conf.j2" to remote host "/etc/resolv.conf"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+ok: [ErickHunter-3]
+
+TASK [bind : Set " systemd-resolved" state "stopped" and enabled "no"] *********
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+
+PLAY [Database Server] *********************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Install "mysql-server"] ******************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Copy file "override.cnf.j2" to remote host "/etc/mysql/mysql.conf.d/override.cnf"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Install "python3-pymysql" a mysql depencancy] ********************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : MySQL database] **************************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : MySQL user] ******************************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Template ".my.cnf" file "my.cnf.j2" to remote host "/var/lib/prometheus/.my.cnf"] ***
+changed: [ErickHunter-1]
+changed: [ErickHunter-2]
+
+TASK [mysql : Install "prometheus-mysqld-exporter"] ****************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Make "DIRECTORY" at "/var/lib/prometheus"] ***********************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Template "prometheus-mysqld-exporter" file "-" to remote host "/etc/default/prometheus-mysqld-exporter"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Create MySQL_exporter_user] **************************************
+changed: [ErickHunter-2]
+changed: [ErickHunter-1]
+
+TASK [mysql : Flush Handlers to run them now so "prometheus-mysqld-exporter" can become a servie.] ***
+
+RUNNING HANDLER [mysql : Restart mysql] ****************************************
+changed: [ErickHunter-1]
+changed: [ErickHunter-2]
+
+RUNNING HANDLER [mysql : Restart prometheus-mysqld-exporter] *******************
+changed: [ErickHunter-1]
+changed: [ErickHunter-2]
+
+TASK [mysql : Set "prometheus-mysqld-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Make "/home/backup/mysql" at "/home/backup/mysql"] ***************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Create user for BACKUP_USER on mysql] ****************************
+changed: [ErickHunter-2]
+changed: [ErickHunter-1]
+
+TASK [mysql : Template "backup.my.cnf" file "backup.my.cnf.j2" to remote host "/home/backup/.my.cnf"] ***
+changed: [ErickHunter-1]
+changed: [ErickHunter-2]
+
+TASK [mysql : Add cron jobs] ***************************************************
+ok: [ErickHunter-1] => (item={'name': 'Agama Database Backup', 'job': 'mysqldump agama > /home/backup/mysql/agama.sql', 'minute': '*/4', 'hour': '*', 'weekday': '*'})
+ok: [ErickHunter-2] => (item={'name': 'Agama Database Backup', 'job': 'mysqldump agama > /home/backup/mysql/agama.sql', 'minute': '*/4', 'hour': '*', 'weekday': '*'})
+ok: [ErickHunter-1] => (item={'name': 'Full Backup', 'job': 'duplicity --no-encryption full /home/backup/mysql/ rsync://ErickHunter@backup.bogmonster.eh/mysql > /tmp/backup.log 2>&1 && echo Backup completed successfully at $(date) >> /tmp/backup.log', 'minute': '*/10', 'hour': '*', 'weekday': '*'})
+ok: [ErickHunter-2] => (item={'name': 'Full Backup', 'job': 'duplicity --no-encryption full /home/backup/mysql/ rsync://ErickHunter@backup.bogmonster.eh/mysql > /tmp/backup.log 2>&1 && echo Backup completed successfully at $(date) >> /tmp/backup.log', 'minute': '*/10', 'hour': '*', 'weekday': '*'})
+ok: [ErickHunter-1] => (item={'name': 'Incremental Backup', 'job': 'duplicity --no-encryption incremental /home/backup/mysql/ rsync://ErickHunter@backup.bogmonster.eh/mysql > /tmp/backup.log 2>&1 && echo IncermentalBackup completed successfully at $(date) >> /tmp/backup.log', 'minute': '*/5', 'hour': '*', 'weekday': '*'})
+ok: [ErickHunter-2] => (item={'name': 'Incremental Backup', 'job': 'duplicity --no-encryption incremental /home/backup/mysql/ rsync://ErickHunter@backup.bogmonster.eh/mysql > /tmp/backup.log 2>&1 && echo IncermentalBackup completed successfully at $(date) >> /tmp/backup.log', 'minute': '*/5', 'hour': '*', 'weekday': '*'})
+
+TASK [mysql : debug] ***********************************************************
+ok: [ErickHunter-1] => {
+    "inventory_hostname": "ErickHunter-1"
+}
+ok: [ErickHunter-2] => {
+    "inventory_hostname": "ErickHunter-2"
+}
+
+TASK [mysql : debug] ***********************************************************
+ok: [ErickHunter-1] => {
+    "mysql_backup_host": "ErickHunter-1"
+}
+ok: [ErickHunter-2] => {
+    "mysql_backup_host": "ErickHunter-1"
+}
+
+TASK [mysql : Create "MySQL" replication user] *********************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Make replication read only] **************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Set "mysql" state "started" and enabled "yes"] *******************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+PLAY [Prometheus] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+
+TASK [prometheus : Install "prometheus"] ***************************************
+ok: [ErickHunter-3]
+
+TASK [prometheus : Template "prometheus.yml" file "prometheus.yml.j2" to remote host "prometheus.yml"] ***
+ok: [ErickHunter-3]
+
+TASK [prometheus : Template "prometheus" file "prometheus.j2" to remote host "/etc/default/prometheus"] ***
+ok: [ErickHunter-3]
+
+TASK [nginx : Install "nginx"] *************************************************
+ok: [ErickHunter-3]
+
+TASK [nginx : Template "defult" file "defult.j2" to remote host "TO"] **********
+ok: [ErickHunter-3]
+
+TASK [nginx : Set nginx state "started" and enabled "yes"] *********************
+ok: [ErickHunter-3]
+
+TASK [nginx : Install "prometheus-nginx-exporter"] *****************************
+ok: [ErickHunter-3]
+
+TASK [nginx : Template "exporter" file "exporter.j2" to remote host "/etc/nginx/sites-enabled/exporter"] ***
+ok: [ErickHunter-3]
+
+TASK [nginx : Flush Handlers to run them now so "SERVICE" can become a servie.] ***
+
+TASK [nginx : Set "prometheus-nginx-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-3]
+
+PLAY [InfluxDB and Telegraf] ***************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Get the influx and telegraf repo key via apt_key] *************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Install influx and telegraf repo] *****************************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Install "influxdb"] *******************************************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Set "influxdb" state "started" and enabled "yes"] *************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Install "telegraf"] *******************************************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Template "influxdb.conf" file "influxdb.conf.j2" to remote host "/etc/influxdb/influxdb.conf"] ***
+ok: [ErickHunter-3]
+
+TASK [influxdb : Template "telegraf.conf" file "telegraf.conf.j2" to remote host "/etc/telegraf/telegraf.conf"] ***
+ok: [ErickHunter-3]
+
+TASK [influxdb : Set "telegraf" state "started" and enabled "yes"] *************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Download "influx_stats_exporter_linux_amd64"] *****************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Setting mode "0755" "/usr/local/bin/influx_stats_exporter_linux_amd64"] ***
+ok: [ErickHunter-3]
+
+TASK [influxdb : Template "prometheus-influxdb-stats-exporter.service" file "prometheus-influxdb-stats-exporter.service.j2" to remote host "TOLONG"] ***
+ok: [ErickHunter-3]
+
+TASK [influxdb : Set "prometheus-influxdb-stats-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-3]
+
+TASK [influxdb : Make "/home/backup/influxdb" at "/home/backup/influxdb"] ******
+ok: [ErickHunter-3]
+
+TASK [influxdb : Template "influxdb-backup" file "influxdb-backup.j2" to remote host "/etc/cron.d/influxdb-backup"] ***
+ok: [ErickHunter-3]
+
+PLAY [Pinger] ******************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+
+TASK [pinger : Create user pinger] *********************************************
+ok: [ErickHunter-3]
+
+TASK [pinger : Install "fping"] ************************************************
+ok: [ErickHunter-3]
+
+TASK [pinger : Make "DIRECTORY" at "/etc/pinger"] ******************************
+ok: [ErickHunter-3]
+
+TASK [pinger : Template "pinger.sh" file "pinger.sh.j2" to remote host "/usr/local/bin/pinger"] ***
+ok: [ErickHunter-3]
+
+TASK [pinger : Template "pinger.conf" file "pinger.conf.j2" to remote host "/etc/pinger/pinger.conf"] ***
+ok: [ErickHunter-3]
+
+TASK [pinger : Template "pinger.conf" file "pinger.service" to remote host "/etc/systemd/system/pinger.service"] ***
+ok: [ErickHunter-3]
+
+TASK [pinger : Set "pinger" state "started" and enabled "yes"] *****************
+ok: [ErickHunter-3]
+
+PLAY [Web servers] *************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [docker : Install docker] *************************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [docker : Set "docker" state "started" and enabled "yes"] *****************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [agama : Creating folder /opt/agama] **************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [agama : Download agama container file] ***********************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [agama : Download agama.py] ***********************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [agama : Create agama docker image file] **********************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [agama : Start Agama Docker containers] ***********************************
+ok: [ErickHunter-2] => (item=0)
+ok: [ErickHunter-1] => (item=0)
+ok: [ErickHunter-2] => (item=1)
+ok: [ErickHunter-1] => (item=1)
+ok: [ErickHunter-2] => (item=2)
+ok: [ErickHunter-1] => (item=2)
+
+PLAY [Internal web servers] ****************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+
+TASK [docker : Install docker] *************************************************
+ok: [ErickHunter-3]
+
+TASK [docker : Set "docker" state "started" and enabled "yes"] *****************
+ok: [ErickHunter-3]
+
+TASK [nginx : Install "nginx"] *************************************************
+ok: [ErickHunter-3]
+
+TASK [nginx : Template "defult" file "defult.j2" to remote host "TO"] **********
+ok: [ErickHunter-3]
+
+TASK [nginx : Set nginx state "started" and enabled "yes"] *********************
+ok: [ErickHunter-3]
+
+TASK [nginx : Install "prometheus-nginx-exporter"] *****************************
+ok: [ErickHunter-3]
+
+TASK [nginx : Template "exporter" file "exporter.j2" to remote host "/etc/nginx/sites-enabled/exporter"] ***
+ok: [ErickHunter-3]
+
+TASK [nginx : Flush Handlers to run them now so "SERVICE" can become a servie.] ***
+
+TASK [nginx : Set "prometheus-nginx-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-3]
+
+PLAY [grafana] *****************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+
+TASK [init : Update APT cache] *************************************************
+ok: [ErickHunter-3]
+
+TASK [init : Install "prometheus-node-exporter"] *******************************
+ok: [ErickHunter-3]
+
+TASK [init : Set "prometheus-node-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-3]
+
+TASK [init : Ensure ca-certificates is installed at a specific version] ********
+ok: [ErickHunter-3]
+
+TASK [init : Install "rsyslog"] ************************************************
+ok: [ErickHunter-3]
+
+TASK [init : Template "50-telegraf.conf" file "50-telegraf.conf.j2" to remote host "/etc/rsyslog.d/50-telegraf.conf"] ***
+ok: [ErickHunter-3]
+
+TASK [init : Set "rsyslog" state "started" and enabled "yes"] ******************
+ok: [ErickHunter-3]
+
+TASK [init : Install "duplicity"] **********************************************
+ok: [ErickHunter-3]
+
+TASK [init : Create user "backup" and generate its keys] ***********************
+ok: [ErickHunter-3]
+
+TASK [init : Create backup user directorys] ************************************
+ok: [ErickHunter-3] => (item=restore)
+ok: [ErickHunter-3] => (item=.ssh)
+
+TASK [init : Template "known_hosts" file "known_hosts.j2" to remote host "/home/backup/.ssh/known_hosts"] ***
+ok: [ErickHunter-3]
+
+TASK [init : Set "cron" state "started" and enabled "yes"] *********************
+ok: [ErickHunter-3]
+
+TASK [grafana : Create necessary directories for grafana] **********************
+ok: [ErickHunter-3] => (item=/opt/grafana/provisioning/dashboards)
+ok: [ErickHunter-3] => (item=/opt/grafana/provisioning/datasources)
+
+TASK [grafana : Template "grafana.ini" to "/opt/grafana/grafana.ini"] **********
+changed: [ErickHunter-3]
+
+TASK [grafana : Template "datasource.yaml" to "/opt/grafana/provisioning/datasources/datasource.yaml"] ***
+ok: [ErickHunter-3]
+
+TASK [grafana : Template "dashboard.yaml" to "/opt/grafana/provisioning/dashboards/dashboard.yaml"] ***
+ok: [ErickHunter-3]
+
+TASK [grafana : Copy grafana dashboards to machine] ****************************
+ok: [ErickHunter-3] => (item=main)
+ok: [ErickHunter-3] => (item=syslog)
+ok: [ErickHunter-3] => (item=mysql)
+ok: [ErickHunter-3] => (item=influx-syslog)
+
+TASK [grafana : Grafana Docker container] **************************************
+ok: [ErickHunter-3]
+
+RUNNING HANDLER [grafana : Restart grafana docker] *****************************
+--- before
++++ after
+@@ -1,4 +1,4 @@
+ {
+-    "restarted": false,
++    "restarted": true,
+     "running": true
+ }
+
+changed: [ErickHunter-3]
+
+PLAY [Keepalived] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [keepalived : Install "keepalived"] ***************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [keepalived : Add user keepalived_script] *********************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [keepalived : Template "user-sec-auth" file "user-sec-auth.j2" to remote host "/home/keepalived_script/user-sec-auth"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [keepalived : Copy keepalived.conf to /etc/keepalived/keepalived.conf] ****
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [keepalived : Copy vrrp_script.j2 to /usr/local/bin/vrrp_script] **********
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [keepalived : Ensure keepalived is started] *******************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [keepalived : Download keepalived exporter to /usr/local/bin/] ************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [keepalived : Copy keepalived-prometheus-exporter.service.j2 to /etc/systemd/system/keepalived-prometheus-exporter.service / create keepalived prometheus exporter service] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [keepalived : Ensure that keepalived exporter is started] *****************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+PLAY [Haproxy] *****************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [haproxy : Install "haproxy"] *********************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [haproxy : Template "haproxy.cfg.j2" file "haproxy.cfg.j2" to remote host "/etc/haproxy/haproxy.cfg"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [haproxy : Set "haproxy" state "started" and enabled "yes"] ***************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [haproxy : Install "prometheus-haproxy-exporter"] *************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [haproxy : Template "prometheus-haproxy-exporter.j2" to remote host "/etc/default/prometheus-haproxy-exporter"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [haproxy : Set "prometheus-haproxy-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+PLAY RECAP *********************************************************************
+ErickHunter-1              : ok=71   changed=6    unreachable=0    failed=0    skipped=4    rescued=0    ignored=0   
+ErickHunter-2              : ok=71   changed=6    unreachable=0    failed=0    skipped=4    rescued=0    ignored=0   
+ErickHunter-3              : ok=89   changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
++ ansible-playbook infra.yaml --diff
+
+PLAY [Initial setup] ***********************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [init : Update APT cache] *************************************************
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [init : Install "prometheus-node-exporter"] *******************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+
+TASK [init : Set "prometheus-node-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [init : Ensure ca-certificates is installed at a specific version] ********
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+
+TASK [init : Install "rsyslog"] ************************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+
+TASK [init : Template "50-telegraf.conf" file "50-telegraf.conf.j2" to remote host "/etc/rsyslog.d/50-telegraf.conf"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+
+TASK [init : Set "rsyslog" state "started" and enabled "yes"] ******************
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [init : Install "duplicity"] **********************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+
+TASK [init : Create user "backup" and generate its keys] ***********************
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [init : Create backup user directorys] ************************************
+ok: [ErickHunter-3] => (item=restore)
+ok: [ErickHunter-2] => (item=restore)
+ok: [ErickHunter-1] => (item=restore)
+ok: [ErickHunter-3] => (item=.ssh)
+ok: [ErickHunter-2] => (item=.ssh)
+ok: [ErickHunter-1] => (item=.ssh)
+
+TASK [init : Template "known_hosts" file "known_hosts.j2" to remote host "/home/backup/.ssh/known_hosts"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+
+TASK [init : Set "cron" state "started" and enabled "yes"] *********************
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+PLAY [DNS Server] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+
+TASK [bind : Install "prometheus-bind-exporter"] *******************************
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [bind : Set "prometheus-bind-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [bind : Install "bind9"] **************************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+
+TASK [bind : Set "bind9" state "started" and enabled "yes"] ********************
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [bind : Install dnspython library] ****************************************
+skipping: [ErickHunter-1]
+skipping: [ErickHunter-2]
+ok: [ErickHunter-3]
+
+TASK [bind : Template "db.bogmonster.j2" file "db.bogmonster" to remote host "/var/cache/bind/db.bogmonster"] ***
+skipping: [ErickHunter-1]
+skipping: [ErickHunter-2]
+ok: [ErickHunter-3]
+
+TASK [bind : Template db.domain.reverse.j2 to /var/cache/bind/db.bogmonster.eh.reverse] ***
+skipping: [ErickHunter-1]
+skipping: [ErickHunter-2]
+ok: [ErickHunter-3]
+
+TASK [bind : Template "named.conf.options.j2" file "named.conf.options.j2" to remote host "/etc/bind/named.conf.options"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+ok: [ErickHunter-3]
+
+TASK [bind : Template "named.conf.local.j2" file "named.conf.local" to remote host "/etc/bind/named.conf.local"] ***
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [bind : Set "bind9" state "started" and enabled "yes"] ********************
+ok: [ErickHunter-2]
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+
+TASK [bind : Execute handlers] *************************************************
+
+TASK [bind : Set A records] ****************************************************
+skipping: [ErickHunter-1] => (item={'key': 'backup', 'value': '192.168.42.132'}) 
+skipping: [ErickHunter-1] => (item={'key': 'cloudflare', 'value': '1.1.1.1'}) 
+skipping: [ErickHunter-1] => (item={'key': 'google', 'value': '8.8.8.8'}) 
+skipping: [ErickHunter-2] => (item={'key': 'backup', 'value': '192.168.42.132'}) 
+skipping: [ErickHunter-2] => (item={'key': 'cloudflare', 'value': '1.1.1.1'}) 
+skipping: [ErickHunter-2] => (item={'key': 'google', 'value': '8.8.8.8'}) 
+ok: [ErickHunter-3] => (item={'key': 'backup', 'value': '192.168.42.132'})
+ok: [ErickHunter-3] => (item={'key': 'cloudflare', 'value': '1.1.1.1'})
+ok: [ErickHunter-3] => (item={'key': 'google', 'value': '8.8.8.8'})
+
+TASK [bind : Execute handlers] *************************************************
+
+TASK [bind : Template "resolv.conf" file "resolv.conf.j2" to remote host "/etc/resolv.conf"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+
+TASK [bind : Set " systemd-resolved" state "stopped" and enabled "no"] *********
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+
+PLAY [Database Server] *********************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Install "mysql-server"] ******************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Copy file "override.cnf.j2" to remote host "/etc/mysql/mysql.conf.d/override.cnf"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Install "python3-pymysql" a mysql depencancy] ********************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : MySQL database] **************************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : MySQL user] ******************************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Template ".my.cnf" file "my.cnf.j2" to remote host "/var/lib/prometheus/.my.cnf"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Install "prometheus-mysqld-exporter"] ****************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Make "DIRECTORY" at "/var/lib/prometheus"] ***********************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Template "prometheus-mysqld-exporter" file "-" to remote host "/etc/default/prometheus-mysqld-exporter"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Create MySQL_exporter_user] **************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Flush Handlers to run them now so "prometheus-mysqld-exporter" can become a servie.] ***
+
+TASK [mysql : Set "prometheus-mysqld-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Make "/home/backup/mysql" at "/home/backup/mysql"] ***************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Create user for BACKUP_USER on mysql] ****************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Template "backup.my.cnf" file "backup.my.cnf.j2" to remote host "/home/backup/.my.cnf"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Add cron jobs] ***************************************************
+ok: [ErickHunter-1] => (item={'name': 'Agama Database Backup', 'job': 'mysqldump agama > /home/backup/mysql/agama.sql', 'minute': '*/4', 'hour': '*', 'weekday': '*'})
+ok: [ErickHunter-2] => (item={'name': 'Agama Database Backup', 'job': 'mysqldump agama > /home/backup/mysql/agama.sql', 'minute': '*/4', 'hour': '*', 'weekday': '*'})
+ok: [ErickHunter-1] => (item={'name': 'Full Backup', 'job': 'duplicity --no-encryption full /home/backup/mysql/ rsync://ErickHunter@backup.bogmonster.eh/mysql > /tmp/backup.log 2>&1 && echo Backup completed successfully at $(date) >> /tmp/backup.log', 'minute': '*/10', 'hour': '*', 'weekday': '*'})
+ok: [ErickHunter-2] => (item={'name': 'Full Backup', 'job': 'duplicity --no-encryption full /home/backup/mysql/ rsync://ErickHunter@backup.bogmonster.eh/mysql > /tmp/backup.log 2>&1 && echo Backup completed successfully at $(date) >> /tmp/backup.log', 'minute': '*/10', 'hour': '*', 'weekday': '*'})
+ok: [ErickHunter-1] => (item={'name': 'Incremental Backup', 'job': 'duplicity --no-encryption incremental /home/backup/mysql/ rsync://ErickHunter@backup.bogmonster.eh/mysql > /tmp/backup.log 2>&1 && echo IncermentalBackup completed successfully at $(date) >> /tmp/backup.log', 'minute': '*/5', 'hour': '*', 'weekday': '*'})
+ok: [ErickHunter-2] => (item={'name': 'Incremental Backup', 'job': 'duplicity --no-encryption incremental /home/backup/mysql/ rsync://ErickHunter@backup.bogmonster.eh/mysql > /tmp/backup.log 2>&1 && echo IncermentalBackup completed successfully at $(date) >> /tmp/backup.log', 'minute': '*/5', 'hour': '*', 'weekday': '*'})
+
+TASK [mysql : debug] ***********************************************************
+ok: [ErickHunter-1] => {
+    "inventory_hostname": "ErickHunter-1"
+}
+ok: [ErickHunter-2] => {
+    "inventory_hostname": "ErickHunter-2"
+}
+
+TASK [mysql : debug] ***********************************************************
+ok: [ErickHunter-1] => {
+    "mysql_backup_host": "ErickHunter-1"
+}
+ok: [ErickHunter-2] => {
+    "mysql_backup_host": "ErickHunter-1"
+}
+
+TASK [mysql : Create "MySQL" replication user] *********************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Make replication read only] **************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Set "mysql" state "started" and enabled "yes"] *******************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+PLAY [Prometheus] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+
+TASK [prometheus : Install "prometheus"] ***************************************
+ok: [ErickHunter-3]
+
+TASK [prometheus : Template "prometheus.yml" file "prometheus.yml.j2" to remote host "prometheus.yml"] ***
+ok: [ErickHunter-3]
+
+TASK [prometheus : Template "prometheus" file "prometheus.j2" to remote host "/etc/default/prometheus"] ***
+ok: [ErickHunter-3]
+
+TASK [nginx : Install "nginx"] *************************************************
+ok: [ErickHunter-3]
+
+TASK [nginx : Template "defult" file "defult.j2" to remote host "TO"] **********
+ok: [ErickHunter-3]
+
+TASK [nginx : Set nginx state "started" and enabled "yes"] *********************
+ok: [ErickHunter-3]
+
+TASK [nginx : Install "prometheus-nginx-exporter"] *****************************
+ok: [ErickHunter-3]
+
+TASK [nginx : Template "exporter" file "exporter.j2" to remote host "/etc/nginx/sites-enabled/exporter"] ***
+ok: [ErickHunter-3]
+
+TASK [nginx : Flush Handlers to run them now so "SERVICE" can become a servie.] ***
+
+TASK [nginx : Set "prometheus-nginx-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-3]
+
+PLAY [InfluxDB and Telegraf] ***************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Get the influx and telegraf repo key via apt_key] *************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Install influx and telegraf repo] *****************************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Install "influxdb"] *******************************************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Set "influxdb" state "started" and enabled "yes"] *************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Install "telegraf"] *******************************************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Template "influxdb.conf" file "influxdb.conf.j2" to remote host "/etc/influxdb/influxdb.conf"] ***
+ok: [ErickHunter-3]
+
+TASK [influxdb : Template "telegraf.conf" file "telegraf.conf.j2" to remote host "/etc/telegraf/telegraf.conf"] ***
+ok: [ErickHunter-3]
+
+TASK [influxdb : Set "telegraf" state "started" and enabled "yes"] *************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Download "influx_stats_exporter_linux_amd64"] *****************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Setting mode "0755" "/usr/local/bin/influx_stats_exporter_linux_amd64"] ***
+ok: [ErickHunter-3]
+
+TASK [influxdb : Template "prometheus-influxdb-stats-exporter.service" file "prometheus-influxdb-stats-exporter.service.j2" to remote host "TOLONG"] ***
+ok: [ErickHunter-3]
+
+TASK [influxdb : Set "prometheus-influxdb-stats-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-3]
+
+TASK [influxdb : Make "/home/backup/influxdb" at "/home/backup/influxdb"] ******
+ok: [ErickHunter-3]
+
+TASK [influxdb : Template "influxdb-backup" file "influxdb-backup.j2" to remote host "/etc/cron.d/influxdb-backup"] ***
+ok: [ErickHunter-3]
+
+PLAY [Pinger] ******************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+
+TASK [pinger : Create user pinger] *********************************************
+ok: [ErickHunter-3]
+
+TASK [pinger : Install "fping"] ************************************************
+ok: [ErickHunter-3]
+
+TASK [pinger : Make "DIRECTORY" at "/etc/pinger"] ******************************
+ok: [ErickHunter-3]
+
+TASK [pinger : Template "pinger.sh" file "pinger.sh.j2" to remote host "/usr/local/bin/pinger"] ***
+ok: [ErickHunter-3]
+
+TASK [pinger : Template "pinger.conf" file "pinger.conf.j2" to remote host "/etc/pinger/pinger.conf"] ***
+ok: [ErickHunter-3]
+
+TASK [pinger : Template "pinger.conf" file "pinger.service" to remote host "/etc/systemd/system/pinger.service"] ***
+ok: [ErickHunter-3]
+
+TASK [pinger : Set "pinger" state "started" and enabled "yes"] *****************
+ok: [ErickHunter-3]
+
+PLAY [Web servers] *************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [docker : Install docker] *************************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [docker : Set "docker" state "started" and enabled "yes"] *****************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [agama : Creating folder /opt/agama] **************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [agama : Download agama container file] ***********************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [agama : Download agama.py] ***********************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [agama : Create agama docker image file] **********************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [agama : Start Agama Docker containers] ***********************************
+ok: [ErickHunter-1] => (item=0)
+ok: [ErickHunter-2] => (item=0)
+ok: [ErickHunter-1] => (item=1)
+ok: [ErickHunter-2] => (item=1)
+ok: [ErickHunter-1] => (item=2)
+ok: [ErickHunter-2] => (item=2)
+
+PLAY [Internal web servers] ****************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+
+TASK [docker : Install docker] *************************************************
+ok: [ErickHunter-3]
+
+TASK [docker : Set "docker" state "started" and enabled "yes"] *****************
+ok: [ErickHunter-3]
+
+TASK [nginx : Install "nginx"] *************************************************
+ok: [ErickHunter-3]
+
+TASK [nginx : Template "defult" file "defult.j2" to remote host "TO"] **********
+ok: [ErickHunter-3]
+
+TASK [nginx : Set nginx state "started" and enabled "yes"] *********************
+ok: [ErickHunter-3]
+
+TASK [nginx : Install "prometheus-nginx-exporter"] *****************************
+ok: [ErickHunter-3]
+
+TASK [nginx : Template "exporter" file "exporter.j2" to remote host "/etc/nginx/sites-enabled/exporter"] ***
+ok: [ErickHunter-3]
+
+TASK [nginx : Flush Handlers to run them now so "SERVICE" can become a servie.] ***
+
+TASK [nginx : Set "prometheus-nginx-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-3]
+
+PLAY [grafana] *****************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+
+TASK [init : Update APT cache] *************************************************
+ok: [ErickHunter-3]
+
+TASK [init : Install "prometheus-node-exporter"] *******************************
+ok: [ErickHunter-3]
+
+TASK [init : Set "prometheus-node-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-3]
+
+TASK [init : Ensure ca-certificates is installed at a specific version] ********
+ok: [ErickHunter-3]
+
+TASK [init : Install "rsyslog"] ************************************************
+ok: [ErickHunter-3]
+
+TASK [init : Template "50-telegraf.conf" file "50-telegraf.conf.j2" to remote host "/etc/rsyslog.d/50-telegraf.conf"] ***
+ok: [ErickHunter-3]
+
+TASK [init : Set "rsyslog" state "started" and enabled "yes"] ******************
+ok: [ErickHunter-3]
+
+TASK [init : Install "duplicity"] **********************************************
+ok: [ErickHunter-3]
+
+TASK [init : Create user "backup" and generate its keys] ***********************
+ok: [ErickHunter-3]
+
+TASK [init : Create backup user directorys] ************************************
+ok: [ErickHunter-3] => (item=restore)
+ok: [ErickHunter-3] => (item=.ssh)
+
+TASK [init : Template "known_hosts" file "known_hosts.j2" to remote host "/home/backup/.ssh/known_hosts"] ***
+ok: [ErickHunter-3]
+
+TASK [init : Set "cron" state "started" and enabled "yes"] *********************
+ok: [ErickHunter-3]
+
+TASK [grafana : Create necessary directories for grafana] **********************
+ok: [ErickHunter-3] => (item=/opt/grafana/provisioning/dashboards)
+ok: [ErickHunter-3] => (item=/opt/grafana/provisioning/datasources)
+
+TASK [grafana : Template "grafana.ini" to "/opt/grafana/grafana.ini"] **********
+ok: [ErickHunter-3]
+
+TASK [grafana : Template "datasource.yaml" to "/opt/grafana/provisioning/datasources/datasource.yaml"] ***
+ok: [ErickHunter-3]
+
+TASK [grafana : Template "dashboard.yaml" to "/opt/grafana/provisioning/dashboards/dashboard.yaml"] ***
+ok: [ErickHunter-3]
+
+TASK [grafana : Copy grafana dashboards to machine] ****************************
+ok: [ErickHunter-3] => (item=main)
+ok: [ErickHunter-3] => (item=syslog)
+ok: [ErickHunter-3] => (item=mysql)
+ok: [ErickHunter-3] => (item=influx-syslog)
+
+TASK [grafana : Grafana Docker container] **************************************
+ok: [ErickHunter-3]
+
+PLAY [Keepalived] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [keepalived : Install "keepalived"] ***************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [keepalived : Add user keepalived_script] *********************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [keepalived : Template "user-sec-auth" file "user-sec-auth.j2" to remote host "/home/keepalived_script/user-sec-auth"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [keepalived : Copy keepalived.conf to /etc/keepalived/keepalived.conf] ****
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [keepalived : Copy vrrp_script.j2 to /usr/local/bin/vrrp_script] **********
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [keepalived : Ensure keepalived is started] *******************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [keepalived : Download keepalived exporter to /usr/local/bin/] ************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [keepalived : Copy keepalived-prometheus-exporter.service.j2 to /etc/systemd/system/keepalived-prometheus-exporter.service / create keepalived prometheus exporter service] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [keepalived : Ensure that keepalived exporter is started] *****************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+PLAY [Haproxy] *****************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [haproxy : Install "haproxy"] *********************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [haproxy : Template "haproxy.cfg.j2" file "haproxy.cfg.j2" to remote host "/etc/haproxy/haproxy.cfg"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [haproxy : Set "haproxy" state "started" and enabled "yes"] ***************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [haproxy : Install "prometheus-haproxy-exporter"] *************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [haproxy : Template "prometheus-haproxy-exporter.j2" to remote host "/etc/default/prometheus-haproxy-exporter"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [haproxy : Set "prometheus-haproxy-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+PLAY RECAP *********************************************************************
+ErickHunter-1              : ok=69   changed=0    unreachable=0    failed=0    skipped=4    rescued=0    ignored=0   
+ErickHunter-2              : ok=69   changed=0    unreachable=0    failed=0    skipped=4    rescued=0    ignored=0   
+ErickHunter-3              : ok=88   changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
++ ansible all -b -m reboot -a test_command=uptime
+ErickHunter-3 | CHANGED => {
+    "changed": true,
+    "elapsed": 40,
+    "rebooted": true
+}
+ErickHunter-1 | CHANGED => {
+    "changed": true,
+    "elapsed": 50,
+    "rebooted": true
+}
+ErickHunter-2 | CHANGED => {
+    "changed": true,
+    "elapsed": 59,
+    "rebooted": true
+}
++ ansible-playbook infra.yaml --diff
+
+PLAY [Initial setup] ***********************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [init : Update APT cache] *************************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+ok: [ErickHunter-3]
+
+TASK [init : Install "prometheus-node-exporter"] *******************************
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [init : Set "prometheus-node-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [init : Ensure ca-certificates is installed at a specific version] ********
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+
+TASK [init : Install "rsyslog"] ************************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+
+TASK [init : Template "50-telegraf.conf" file "50-telegraf.conf.j2" to remote host "/etc/rsyslog.d/50-telegraf.conf"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+
+TASK [init : Set "rsyslog" state "started" and enabled "yes"] ******************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+
+TASK [init : Install "duplicity"] **********************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+ok: [ErickHunter-3]
+
+TASK [init : Create user "backup" and generate its keys] ***********************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+
+TASK [init : Create backup user directorys] ************************************
+ok: [ErickHunter-3] => (item=restore)
+ok: [ErickHunter-1] => (item=restore)
+ok: [ErickHunter-2] => (item=restore)
+ok: [ErickHunter-3] => (item=.ssh)
+ok: [ErickHunter-1] => (item=.ssh)
+ok: [ErickHunter-2] => (item=.ssh)
+
+TASK [init : Template "known_hosts" file "known_hosts.j2" to remote host "/home/backup/.ssh/known_hosts"] ***
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [init : Set "cron" state "started" and enabled "yes"] *********************
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+PLAY [DNS Server] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [bind : Install "prometheus-bind-exporter"] *******************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+
+TASK [bind : Set "prometheus-bind-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+
+TASK [bind : Install "bind9"] **************************************************
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [bind : Set "bind9" state "started" and enabled "yes"] ********************
+ok: [ErickHunter-2]
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+
+TASK [bind : Install dnspython library] ****************************************
+skipping: [ErickHunter-1]
+skipping: [ErickHunter-2]
+ok: [ErickHunter-3]
+
+TASK [bind : Template "db.bogmonster.j2" file "db.bogmonster" to remote host "/var/cache/bind/db.bogmonster"] ***
+skipping: [ErickHunter-1]
+skipping: [ErickHunter-2]
+ok: [ErickHunter-3]
+
+TASK [bind : Template db.domain.reverse.j2 to /var/cache/bind/db.bogmonster.eh.reverse] ***
+skipping: [ErickHunter-1]
+skipping: [ErickHunter-2]
+ok: [ErickHunter-3]
+
+TASK [bind : Template "named.conf.options.j2" file "named.conf.options.j2" to remote host "/etc/bind/named.conf.options"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+ok: [ErickHunter-3]
+
+TASK [bind : Template "named.conf.local.j2" file "named.conf.local" to remote host "/etc/bind/named.conf.local"] ***
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [bind : Set "bind9" state "started" and enabled "yes"] ********************
+ok: [ErickHunter-3]
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [bind : Execute handlers] *************************************************
+
+TASK [bind : Set A records] ****************************************************
+skipping: [ErickHunter-1] => (item={'key': 'backup', 'value': '192.168.42.132'}) 
+skipping: [ErickHunter-1] => (item={'key': 'cloudflare', 'value': '1.1.1.1'}) 
+skipping: [ErickHunter-1] => (item={'key': 'google', 'value': '8.8.8.8'}) 
+skipping: [ErickHunter-2] => (item={'key': 'backup', 'value': '192.168.42.132'}) 
+skipping: [ErickHunter-2] => (item={'key': 'cloudflare', 'value': '1.1.1.1'}) 
+skipping: [ErickHunter-2] => (item={'key': 'google', 'value': '8.8.8.8'}) 
+ok: [ErickHunter-3] => (item={'key': 'backup', 'value': '192.168.42.132'})
+ok: [ErickHunter-3] => (item={'key': 'cloudflare', 'value': '1.1.1.1'})
+ok: [ErickHunter-3] => (item={'key': 'google', 'value': '8.8.8.8'})
+
+TASK [bind : Execute handlers] *************************************************
+
+TASK [bind : Template "resolv.conf" file "resolv.conf.j2" to remote host "/etc/resolv.conf"] ***
+ok: [ErickHunter-3]
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [bind : Set " systemd-resolved" state "stopped" and enabled "no"] *********
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+ok: [ErickHunter-3]
+
+PLAY [Database Server] *********************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Install "mysql-server"] ******************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Copy file "override.cnf.j2" to remote host "/etc/mysql/mysql.conf.d/override.cnf"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Install "python3-pymysql" a mysql depencancy] ********************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : MySQL database] **************************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : MySQL user] ******************************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Template ".my.cnf" file "my.cnf.j2" to remote host "/var/lib/prometheus/.my.cnf"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Install "prometheus-mysqld-exporter"] ****************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Make "DIRECTORY" at "/var/lib/prometheus"] ***********************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Template "prometheus-mysqld-exporter" file "-" to remote host "/etc/default/prometheus-mysqld-exporter"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Create MySQL_exporter_user] **************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Flush Handlers to run them now so "prometheus-mysqld-exporter" can become a servie.] ***
+
+TASK [mysql : Set "prometheus-mysqld-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Make "/home/backup/mysql" at "/home/backup/mysql"] ***************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Create user for BACKUP_USER on mysql] ****************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Template "backup.my.cnf" file "backup.my.cnf.j2" to remote host "/home/backup/.my.cnf"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Add cron jobs] ***************************************************
+ok: [ErickHunter-2] => (item={'name': 'Agama Database Backup', 'job': 'mysqldump agama > /home/backup/mysql/agama.sql', 'minute': '*/4', 'hour': '*', 'weekday': '*'})
+ok: [ErickHunter-1] => (item={'name': 'Agama Database Backup', 'job': 'mysqldump agama > /home/backup/mysql/agama.sql', 'minute': '*/4', 'hour': '*', 'weekday': '*'})
+ok: [ErickHunter-2] => (item={'name': 'Full Backup', 'job': 'duplicity --no-encryption full /home/backup/mysql/ rsync://ErickHunter@backup.bogmonster.eh/mysql > /tmp/backup.log 2>&1 && echo Backup completed successfully at $(date) >> /tmp/backup.log', 'minute': '*/10', 'hour': '*', 'weekday': '*'})
+ok: [ErickHunter-1] => (item={'name': 'Full Backup', 'job': 'duplicity --no-encryption full /home/backup/mysql/ rsync://ErickHunter@backup.bogmonster.eh/mysql > /tmp/backup.log 2>&1 && echo Backup completed successfully at $(date) >> /tmp/backup.log', 'minute': '*/10', 'hour': '*', 'weekday': '*'})
+ok: [ErickHunter-1] => (item={'name': 'Incremental Backup', 'job': 'duplicity --no-encryption incremental /home/backup/mysql/ rsync://ErickHunter@backup.bogmonster.eh/mysql > /tmp/backup.log 2>&1 && echo IncermentalBackup completed successfully at $(date) >> /tmp/backup.log', 'minute': '*/5', 'hour': '*', 'weekday': '*'})
+ok: [ErickHunter-2] => (item={'name': 'Incremental Backup', 'job': 'duplicity --no-encryption incremental /home/backup/mysql/ rsync://ErickHunter@backup.bogmonster.eh/mysql > /tmp/backup.log 2>&1 && echo IncermentalBackup completed successfully at $(date) >> /tmp/backup.log', 'minute': '*/5', 'hour': '*', 'weekday': '*'})
+
+TASK [mysql : debug] ***********************************************************
+ok: [ErickHunter-1] => {
+    "inventory_hostname": "ErickHunter-1"
+}
+ok: [ErickHunter-2] => {
+    "inventory_hostname": "ErickHunter-2"
+}
+
+TASK [mysql : debug] ***********************************************************
+ok: [ErickHunter-1] => {
+    "mysql_backup_host": "ErickHunter-1"
+}
+ok: [ErickHunter-2] => {
+    "mysql_backup_host": "ErickHunter-1"
+}
+
+TASK [mysql : Create "MySQL" replication user] *********************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [mysql : Make replication read only] **************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [mysql : Set "mysql" state "started" and enabled "yes"] *******************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+PLAY [Prometheus] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+
+TASK [prometheus : Install "prometheus"] ***************************************
+ok: [ErickHunter-3]
+
+TASK [prometheus : Template "prometheus.yml" file "prometheus.yml.j2" to remote host "prometheus.yml"] ***
+ok: [ErickHunter-3]
+
+TASK [prometheus : Template "prometheus" file "prometheus.j2" to remote host "/etc/default/prometheus"] ***
+ok: [ErickHunter-3]
+
+TASK [nginx : Install "nginx"] *************************************************
+ok: [ErickHunter-3]
+
+TASK [nginx : Template "defult" file "defult.j2" to remote host "TO"] **********
+ok: [ErickHunter-3]
+
+TASK [nginx : Set nginx state "started" and enabled "yes"] *********************
+ok: [ErickHunter-3]
+
+TASK [nginx : Install "prometheus-nginx-exporter"] *****************************
+ok: [ErickHunter-3]
+
+TASK [nginx : Template "exporter" file "exporter.j2" to remote host "/etc/nginx/sites-enabled/exporter"] ***
+ok: [ErickHunter-3]
+
+TASK [nginx : Flush Handlers to run them now so "SERVICE" can become a servie.] ***
+
+TASK [nginx : Set "prometheus-nginx-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-3]
+
+PLAY [InfluxDB and Telegraf] ***************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Get the influx and telegraf repo key via apt_key] *************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Install influx and telegraf repo] *****************************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Install "influxdb"] *******************************************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Set "influxdb" state "started" and enabled "yes"] *************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Install "telegraf"] *******************************************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Template "influxdb.conf" file "influxdb.conf.j2" to remote host "/etc/influxdb/influxdb.conf"] ***
+ok: [ErickHunter-3]
+
+TASK [influxdb : Template "telegraf.conf" file "telegraf.conf.j2" to remote host "/etc/telegraf/telegraf.conf"] ***
+ok: [ErickHunter-3]
+
+TASK [influxdb : Set "telegraf" state "started" and enabled "yes"] *************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Download "influx_stats_exporter_linux_amd64"] *****************
+ok: [ErickHunter-3]
+
+TASK [influxdb : Setting mode "0755" "/usr/local/bin/influx_stats_exporter_linux_amd64"] ***
+ok: [ErickHunter-3]
+
+TASK [influxdb : Template "prometheus-influxdb-stats-exporter.service" file "prometheus-influxdb-stats-exporter.service.j2" to remote host "TOLONG"] ***
+ok: [ErickHunter-3]
+
+TASK [influxdb : Set "prometheus-influxdb-stats-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-3]
+
+TASK [influxdb : Make "/home/backup/influxdb" at "/home/backup/influxdb"] ******
+ok: [ErickHunter-3]
+
+TASK [influxdb : Template "influxdb-backup" file "influxdb-backup.j2" to remote host "/etc/cron.d/influxdb-backup"] ***
+ok: [ErickHunter-3]
+
+PLAY [Pinger] ******************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+
+TASK [pinger : Create user pinger] *********************************************
+ok: [ErickHunter-3]
+
+TASK [pinger : Install "fping"] ************************************************
+ok: [ErickHunter-3]
+
+TASK [pinger : Make "DIRECTORY" at "/etc/pinger"] ******************************
+ok: [ErickHunter-3]
+
+TASK [pinger : Template "pinger.sh" file "pinger.sh.j2" to remote host "/usr/local/bin/pinger"] ***
+ok: [ErickHunter-3]
+
+TASK [pinger : Template "pinger.conf" file "pinger.conf.j2" to remote host "/etc/pinger/pinger.conf"] ***
+ok: [ErickHunter-3]
+
+TASK [pinger : Template "pinger.conf" file "pinger.service" to remote host "/etc/systemd/system/pinger.service"] ***
+ok: [ErickHunter-3]
+
+TASK [pinger : Set "pinger" state "started" and enabled "yes"] *****************
+ok: [ErickHunter-3]
+
+PLAY [Web servers] *************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [docker : Install docker] *************************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [docker : Set "docker" state "started" and enabled "yes"] *****************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [agama : Creating folder /opt/agama] **************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [agama : Download agama container file] ***********************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [agama : Download agama.py] ***********************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [agama : Create agama docker image file] **********************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [agama : Start Agama Docker containers] ***********************************
+ok: [ErickHunter-2] => (item=0)
+ok: [ErickHunter-1] => (item=0)
+ok: [ErickHunter-1] => (item=1)
+ok: [ErickHunter-2] => (item=1)
+ok: [ErickHunter-1] => (item=2)
+ok: [ErickHunter-2] => (item=2)
+
+PLAY [Internal web servers] ****************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+
+TASK [docker : Install docker] *************************************************
+ok: [ErickHunter-3]
+
+TASK [docker : Set "docker" state "started" and enabled "yes"] *****************
+ok: [ErickHunter-3]
+
+TASK [nginx : Install "nginx"] *************************************************
+ok: [ErickHunter-3]
+
+TASK [nginx : Template "defult" file "defult.j2" to remote host "TO"] **********
+ok: [ErickHunter-3]
+
+TASK [nginx : Set nginx state "started" and enabled "yes"] *********************
+ok: [ErickHunter-3]
+
+TASK [nginx : Install "prometheus-nginx-exporter"] *****************************
+ok: [ErickHunter-3]
+
+TASK [nginx : Template "exporter" file "exporter.j2" to remote host "/etc/nginx/sites-enabled/exporter"] ***
+ok: [ErickHunter-3]
+
+TASK [nginx : Flush Handlers to run them now so "SERVICE" can become a servie.] ***
+
+TASK [nginx : Set "prometheus-nginx-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-3]
+
+PLAY [grafana] *****************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-3]
+
+TASK [init : Update APT cache] *************************************************
+ok: [ErickHunter-3]
+
+TASK [init : Install "prometheus-node-exporter"] *******************************
+ok: [ErickHunter-3]
+
+TASK [init : Set "prometheus-node-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-3]
+
+TASK [init : Ensure ca-certificates is installed at a specific version] ********
+ok: [ErickHunter-3]
+
+TASK [init : Install "rsyslog"] ************************************************
+ok: [ErickHunter-3]
+
+TASK [init : Template "50-telegraf.conf" file "50-telegraf.conf.j2" to remote host "/etc/rsyslog.d/50-telegraf.conf"] ***
+ok: [ErickHunter-3]
+
+TASK [init : Set "rsyslog" state "started" and enabled "yes"] ******************
+ok: [ErickHunter-3]
+
+TASK [init : Install "duplicity"] **********************************************
+ok: [ErickHunter-3]
+
+TASK [init : Create user "backup" and generate its keys] ***********************
+ok: [ErickHunter-3]
+
+TASK [init : Create backup user directorys] ************************************
+ok: [ErickHunter-3] => (item=restore)
+ok: [ErickHunter-3] => (item=.ssh)
+
+TASK [init : Template "known_hosts" file "known_hosts.j2" to remote host "/home/backup/.ssh/known_hosts"] ***
+ok: [ErickHunter-3]
+
+TASK [init : Set "cron" state "started" and enabled "yes"] *********************
+ok: [ErickHunter-3]
+
+TASK [grafana : Create necessary directories for grafana] **********************
+ok: [ErickHunter-3] => (item=/opt/grafana/provisioning/dashboards)
+ok: [ErickHunter-3] => (item=/opt/grafana/provisioning/datasources)
+
+TASK [grafana : Template "grafana.ini" to "/opt/grafana/grafana.ini"] **********
+ok: [ErickHunter-3]
+
+TASK [grafana : Template "datasource.yaml" to "/opt/grafana/provisioning/datasources/datasource.yaml"] ***
+ok: [ErickHunter-3]
+
+TASK [grafana : Template "dashboard.yaml" to "/opt/grafana/provisioning/dashboards/dashboard.yaml"] ***
+ok: [ErickHunter-3]
+
+TASK [grafana : Copy grafana dashboards to machine] ****************************
+ok: [ErickHunter-3] => (item=main)
+ok: [ErickHunter-3] => (item=syslog)
+ok: [ErickHunter-3] => (item=mysql)
+ok: [ErickHunter-3] => (item=influx-syslog)
+
+TASK [grafana : Grafana Docker container] **************************************
+ok: [ErickHunter-3]
+
+PLAY [Keepalived] **************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [keepalived : Install "keepalived"] ***************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [keepalived : Add user keepalived_script] *********************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [keepalived : Template "user-sec-auth" file "user-sec-auth.j2" to remote host "/home/keepalived_script/user-sec-auth"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [keepalived : Copy keepalived.conf to /etc/keepalived/keepalived.conf] ****
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [keepalived : Copy vrrp_script.j2 to /usr/local/bin/vrrp_script] **********
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [keepalived : Ensure keepalived is started] *******************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [keepalived : Download keepalived exporter to /usr/local/bin/] ************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [keepalived : Copy keepalived-prometheus-exporter.service.j2 to /etc/systemd/system/keepalived-prometheus-exporter.service / create keepalived prometheus exporter service] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [keepalived : Ensure that keepalived exporter is started] *****************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+PLAY [Haproxy] *****************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [haproxy : Install "haproxy"] *********************************************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [haproxy : Template "haproxy.cfg.j2" file "haproxy.cfg.j2" to remote host "/etc/haproxy/haproxy.cfg"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [haproxy : Set "haproxy" state "started" and enabled "yes"] ***************
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+TASK [haproxy : Install "prometheus-haproxy-exporter"] *************************
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [haproxy : Template "prometheus-haproxy-exporter.j2" to remote host "/etc/default/prometheus-haproxy-exporter"] ***
+ok: [ErickHunter-2]
+ok: [ErickHunter-1]
+
+TASK [haproxy : Set "prometheus-haproxy-exporter" state "started" and enabled "yes"] ***
+ok: [ErickHunter-1]
+ok: [ErickHunter-2]
+
+PLAY RECAP *********************************************************************
+ErickHunter-1              : ok=69   changed=0    unreachable=0    failed=0    skipped=4    rescued=0    ignored=0   
+ErickHunter-2              : ok=69   changed=0    unreachable=0    failed=0    skipped=4    rescued=0    ignored=0   
+ErickHunter-3              : ok=88   changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
++ date
+Wed Jan 17 21:09:47 EET 2024

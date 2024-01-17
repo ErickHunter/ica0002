@@ -50,7 +50,7 @@
     owner: prometheus
     group: prometheus
     mode: 0644
-  no_log: no #ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  no_log: yes #ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
   notify:
     - Restart mysql
     - Restart prometheus-mysqld-exporter
@@ -126,7 +126,7 @@
     owner: backup
     group: backup
     mode: 0660
-#  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  no_log: yes # ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
  # notify: HANDLER
 
 # Cronjob tasks here
