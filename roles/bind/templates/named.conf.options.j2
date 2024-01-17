@@ -26,3 +26,17 @@ acl local_network {
     {{ network }};
     {% endfor %}
 };
+
+statistics-channels {
+  inet 127.0.0.1 port 8053 allow { 127.0.0.1; };
+};
+
+key "transfer" {
+        algorithm hmac-sha256;
+        secret "{{ dns_transfer_key }}";
+};
+
+key "nsupdate" {
+        algorithm hmac-sha256;
+        secret "{{ dns_update_key }}";
+};

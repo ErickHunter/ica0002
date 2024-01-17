@@ -1,4 +1,18 @@
 ---
+# LAB 7 task2 Next things are for the BIND exproter.
+- name: Install "prometheus-bind-exporter"
+  apt:
+    name: prometheus-bind-exporter
+    state: latest
+    update_cache: no
+
+- name: Set "prometheus-bind-exporter" state "started" and enabled "yes"
+  service:
+    name: prometheus-bind-exporter
+    state: started
+    enabled: yes 
+
+# LAB 5 task 2 Install bind
 - name: Install "bind9"
   apt:
     name: bind9
@@ -11,45 +25,110 @@
     state: started
     enabled: yes 
 
+- name: Install dnspython library
+  ansible.builtin.apt:
+    name: python3-dnspython
+    state: present
+  when: inventory_hostname in groups['dns_masters'] # Allows for setting DNS master.
+
+# Task 5 LAB 5  Master Zone configuration
+# this is for the master zone bogmonster.fl
+- name: Template "db.bogmonster.j2" file "db.bogmonster" to remote host "/var/cache/bind/db.bogmonster"
+  template:
+    src: db.bogmonster.j2
+    dest: /var/cache/bind/db.{{ my_domain }}
+    force: no
+    #owner: OPTIONAL_UESR
+    #mode: OPTIONAL
+  #no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  notify: Rndc reload
+  when: inventory_hostname in groups['dns_masters'] # Allows for setting DNS master.
+
+# LAB 14 Reverse
+- name: Template db.domain.reverse.j2 to /var/cache/bind/db.bogmonster.eh.reverse
+  template:
+    src: db.domain.reverse.j2
+    dest: /var/cache/bind/db.{{ my_domain }}.reverse
+    force: no
+  notify: Rndc reload
+  when: inventory_hostname in groups['dns_masters'] # Allows for setting DNS master.
+
+
+
+
+#This is for the named.conf.options
 - name: Template "named.conf.options.j2" file "named.conf.options.j2" to remote host "/etc/bind/named.conf.options"
   template:
     src: named.conf.options.j2
     dest: /etc/bind/named.conf.options
+    mode: 0660   
     #owner: OPTIONAL_UESR
     #mode: OPTIONAL
-  #no_log: no #ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  # no_log: yes #ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
   notify: Restart bind9
+  
 
-#this is for the master zone bogmonster.fl
-- name: Template "db.bogmonster.j2" file "db.bogmonster" to remote host "/var/cache/bind/db.bogmonster"
-  template:
-    src: db.bogmonster.j2
-    dest: /var/cache/bind/db.bogmonster
-    #owner: OPTIONAL_UESR
-    #mode: OPTIONAL
-  #no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
-  notify: Rndc reload
-
-#this is for the named.conf.local
+#This is for the named.conf.local
 - name: Template "named.conf.local.j2" file "named.conf.local" to remote host "/etc/bind/named.conf.local"
   template:
     src: named.conf.local.j2
     dest: /etc/bind/named.conf.local
+    mode: 0660
     #owner: OPTIONAL_UESR
     #mode: OPTIONAL
   #no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
-  notify: Rndc reload
+  notify: Restart bind9
+  
 
-
-#this is the resolv.conf stuff #1 stop resolv.service
-#make sure service is NOT started and NOT enabled
-- name: Set " systemd-resolved.service" state "stopped" and enabled "no"
+- name: Set "bind9" state "started" and enabled "yes"
   service:
-    name:  systemd-resolved.service
-    state: stopped
-    enabled: no  
+    name: bind9
+    state: started
+    enabled: yes 
 
-#this is the resolv.conf stuff #2 template over the new resolv.conf
+- name: Execute handlers
+  meta: flush_handlers
+
+
+
+
+#LAB 14 setup records
+- name: Set A records
+  when: inventory_hostname in groups["dns_masters"]
+  nsupdate:
+    key_algorithm: "hmac-sha256"
+    key_name: "nsupdate"
+    key_secret: "{{ dns_update_key }}"
+    server: "localhost"
+    zone: "{{ my_domain }}"
+    record: "{{ item.key }}"
+    type: "A"
+    value: "{{ item.value }}"
+  loop: "{{ dns_a_records | dict2items }}"
+  #run_once: True
+
+- name: Set CNAME records
+  when: inventory_hostname in groups["dns_masters"]
+  nsupdate:
+    key_algorithm: "hmac-sha256"
+    key_name: "nsupdate"
+    key_secret: "{{ dns_update_key }}"
+    server: "localhost"
+    zone: "{{ my_domain }}"
+    record: "{{ item.key }}"
+    type: "CNAME"
+    value: "{{ item.value }}"
+  loop: "{{ dns_cname_records | dict2items }}"
+
+
+
+
+- name: Execute handlers
+  meta: flush_handlers
+
+
+#this is the resolv.conf stuff #2 stop resolv.service
+#this is the resolv.conf stuff #1 template over the new resolv.conf
 - name: Template "resolv.conf" file "resolv.conf.j2" to remote host "/etc/resolv.conf"
   template:
     src: resolv.conf.j2
@@ -58,19 +137,10 @@
     #mode: OPTIONAL
   #no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
 
-- debug:
-    msg: "{% for vm in groups['all'] %} nameserver {{ hostvars[vm]['ansible_default_ipv4']['address'] }}{% endfor %}"
-
-
-#Next things are for the BIND exproter.
-- name: Install "prometheus-bind-exporter"
-  apt:
-    name: prometheus-bind-exporter
-    state: latest
-    update_cache: no
-
-- name: Set "prometheus-bind-exporter" state "started" and enabled "yes"
+#make sure service is NOT started and NOT enabled
+- name: Set " systemd-resolved" state "stopped" and enabled "no"
   service:
-    name: prometheus-bind-exporter
-    state: started
-    enabled: yes  
+    name:  systemd-resolved
+    state: stopped
+    enabled: no
+  notify: Rndc reload

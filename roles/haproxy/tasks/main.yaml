@@ -1,0 +1,39 @@
+---
+- name: Install "haproxy"
+  apt:
+    name: haproxy
+    state: latest
+    update_cache: no
+
+# haproxy confing
+- name: Template "haproxy.cfg.j2" file "haproxy.cfg.j2" to remote host "/etc/haproxy/haproxy.cfg"
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+  notify: Restart haproxy
+
+# make sure HAPROXY is started
+- name: Set "haproxy" state "started" and enabled "yes"
+  service:
+    name: haproxy
+    state: started
+    enabled: yes  
+
+# LAB-13 4 haproxy monitoring
+- name: Install "prometheus-haproxy-exporter"
+  apt:
+    name: prometheus-haproxy-exporter
+    state: latest
+    update_cache: no
+
+- name: Template "prometheus-haproxy-exporter.j2" to remote host "/etc/default/prometheus-haproxy-exporter"
+  template:
+    src: prometheus-haproxy-exporter.j2
+    dest: /etc/default/prometheus-haproxy-exporter
+  notify: Restart haproxy
+
+- name: Set "prometheus-haproxy-exporter" state "started" and enabled "yes"
+  service:
+    name: prometheus-haproxy-exporter
+    state: started
+    enabled: yes  
