@@ -1,0 +1,61 @@
+---
+- name: Install "keepalived"
+  apt:
+    name: keepalived
+    state: latest
+    update_cache: no
+
+- name: Add user keepalived_script
+  user:
+    name: "keepalived_script"
+    home: /home/keepalived_script
+
+- name: Template "user-sec-auth" file "user-sec-auth.j2" to remote host "/home/keepalived_script/user-sec-auth"
+  template:
+    src: user-sec-auth.j2
+    dest: /home/keepalived_script/auth
+  #no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
+  notify: Restart keepalived
+
+- name: Copy keepalived.conf to /etc/keepalived/keepalived.conf
+  template:
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+  notify: Restart keepalived
+
+- name: Copy vrrp_script.j2 to /usr/local/bin/vrrp_script
+  template:
+    src: vrrp_script.j2
+    dest: /usr/local/bin/vrrp_script
+    owner: keepalived_script
+    group: keepalived_script
+    mode: 0755
+  notify:
+    - Restart keepalived
+
+- name: Ensure keepalived is started
+  service:
+    name: keepalived
+    state: started
+
+
+# LAB 13 Task 5. Add Keepalived monitoring
+- name: Download keepalived exporter to /usr/local/bin/
+  unarchive:
+    src: https://github.com/cafebazaar/keepalived-exporter/releases/download/v1.2.0/keepalived-exporter-1.2.0.linux-amd64.tar.gz
+    dest: /usr/local/bin/
+    remote_src: yes
+
+- name: Copy keepalived-prometheus-exporter.service.j2 to /etc/systemd/system/keepalived-prometheus-exporter.service / create keepalived prometheus exporter service
+  template:
+    src: keepalived-prometheus-exporter.service.j2
+    dest: /etc/systemd/system/keepalived-prometheus-exporter.service
+  notify:
+    - Reload daemons
+    - Restart keepalived_exporter
+
+- name: Ensure that keepalived exporter is started
+  service:
+    name: keepalived-prometheus-exporter.service
+    state: started
+    enabled: yes

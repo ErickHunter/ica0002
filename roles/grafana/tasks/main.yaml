@@ -43,3 +43,30 @@
     published_ports: "{{ grafana_port }}:3000"
     volumes: /opt/grafana:/etc/grafana
     restart_policy: always # need this so it runs again on reboot
+
+- name: Debug URL
+  debug:
+    msg: "http://{{ vm3_name }}.{{ my_domain }}/grafana"
+
+- name: Debug pass
+  debug:
+    msg: "{{ my_grafana_password }}"
+
+- name: Debug user
+  debug:
+    msg: "{{ my_grafana_user }}"
+
+#FYI your get an error if you try to create more than one user with the same name.
+#Changing pass updates users password
+- name: Create or update a Grafana user
+  community.grafana.grafana_user:
+    url: "http://{{ vm3_name }}.{{ my_domain }}/grafana"
+    url_username: admin
+    url_password: "{{ grafana_admin_password }}"
+    name: "{{ my_grafana_name }}" # Name is optional
+    email: "{{ my_grafana_email }}"
+    login: "{{ my_grafana_user }}" # login/user is is required
+    password: "{{ my_grafana_password }}"
+    is_admin: true
+    state: present
+  #no_log: true 

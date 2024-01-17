@@ -21,12 +21,14 @@
     build:
       path: /opt/agama
 
-- name: Create Agama Docker containers
+- name: Start Agama Docker containers
   community.docker.docker_container:
     name: "agama-{{ item + 1 }}"
     image: agama
     env:
       AGAMA_DATABASE_URI: "mysql+pymysql://{{ mysql_user }}:{{ mysql_password }}@{{ mysql_host }}/{{ mysql_database }}"
     published_ports: "{{ agama_port + item }}:8000"
-  no_log: no
+    volumes:
+      - "/etc/resolv.conf:/etc/resolv.conf"
+    restart_policy: always
   loop: "{{ range(agama_containers_count) }}"

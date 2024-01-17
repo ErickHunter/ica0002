@@ -1,0 +1,44 @@
+global_defs {
+
+    enable_script_security
+    script_user keepalived_script
+}
+
+vrrp_script check_haproxy {
+    script "/usr/local/bin/vrrp_script"
+    weight 20
+    interval 1
+}
+
+vrrp_instance agama {
+    interface ens3
+    virtual_router_id {{ keepalived_virtual_id }}
+    {% if inventory_hostname == 'erickhunter-1' %}
+    priority 100
+    {% else %}
+    priority 99
+    {% endif %}
+    advert_int 1
+    virtual_ipaddress {
+            {% set octet = ansible_default_ipv4.address.split('.')[2] %}
+            {% set forth_octet = hostvars['ErickHunter-2']['ansible_default_ipv4']['address'].split('.')[3] %}
+            {% if octet == '42' %}
+                192.168.100.{{ forth_octet }}/24
+            {% elif octet == '43' %}
+                192.168.101.{{ forth_octet }}/24
+            {% endif %}
+        }
+
+    unicast_peer {
+        {% for vm in groups['keepalived'] %}
+        {% if vm != inventory_hostname %}
+        {{ hostvars[vm]['ansible_default_ipv4']['address'] }}
+        {% endif %}
+        {% endfor %}
+    }
+
+    track_script {
+        check_haproxy
+    }
+
+}
