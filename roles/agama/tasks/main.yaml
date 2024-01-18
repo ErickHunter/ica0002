@@ -32,3 +32,16 @@
       - "/etc/resolv.conf:/etc/resolv.conf"
     restart_policy: always
   loop: "{{ range(agama_containers_count) }}"
+
+- name: Set CNAME records
+  delegate_to: ErickHunter-3
+  nsupdate:
+    key_algorithm: "hmac-sha256"
+    key_name: "nsupdate"
+    key_secret: "{{ dns_update_key }}"
+    server: "localhost"
+    zone: "{{ my_domain }}"
+    record: "{{ item.key }}"
+    type: "CNAME"
+    value: "{{ item.value }}"
+  loop: "{{ dns_cname_records | dict2items | selectattr('key', 'in', ['www-1', 'www-2']) }}"

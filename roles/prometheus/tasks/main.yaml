@@ -24,3 +24,17 @@
 #    mode: OPTIONAL
 #  no_log: ONLY_FOR_THINGS_WITH_SECRETS_IN_TEMPLATE
   notify: Restart prometheus
+
+- name: Set CNAME records
+  delegate_to: ErickHunter-3
+  nsupdate:
+    key_algorithm: "hmac-sha256"
+    key_name: "nsupdate"
+    key_secret: "{{ dns_update_key }}"
+    server: "localhost"
+    zone: "{{ my_domain }}"
+    record: "{{ item.key }}"
+    type: "CNAME"
+    value: "{{ item.value }}"
+  loop: "{{ dns_cname_records | dict2items | selectattr('key', 'in', ['prometheus']) }}"
+  no_log: yes
